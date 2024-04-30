@@ -25,3 +25,8 @@ client.on('data', (data: Buffer) => {
 client.on('close', () => {
     console.log('Connection closed');
 });
+
+client.on('error', (error: Error) => {
+    console.error('Connection error:', error.message);
+    client.destroy(); // Close the connection
+});
