@@ -1,7 +1,8 @@
 import { Connection, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import bs58 from "bs58";
 
-const connection = new Connection("https://api.devnet.solana.com");
+// const connection = new Connection("https://api.devnet.solana.com");
+const connection = new Connection("http://localhost::8899");
 
 const keypair = Keypair.fromSecretKey(
     // TODO: change your account here
