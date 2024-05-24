@@ -1,0 +1,5 @@
+* solidity projext example
+
+copy from [[https://dev.to/oliverjumpertz/how-to-set-up-a-solidity-project-and-create-your-first-smart-contract-4e9d][How To Set Up A Solidity Project And Create Your First Smart Contract]]
+
+also see [[https://github.com/oliverjumpertz/solidity-base][solidity-base]]
