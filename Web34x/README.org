@@ -1,0 +1,5 @@
+* web3 example
+
+copy from [[https://medium.com/coinmonks/a-complete-typescript-example-with-web3-js-4-x-4ad7a9a611ab][A Complete Typescript Example with Web3.js 4.x]]
+
+also see [[https://github.com/dilumb/Web3_4x][Web3_4x]]
