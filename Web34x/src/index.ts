@@ -7,8 +7,10 @@ import { compileSols, writeOutput } from './solc-lib'
 const { Web3, ETH_DATA_FORMAT, DEFAULT_RETURN_FORMAT } = require('web3');
 import type { Web3BaseProvider, AbiStruct, Address } from 'web3-types'
 
-let fs = require('fs')
-const path = require('path');
+// let fs = require('fs')
+import fs from 'fs';
+// const path = require('path');
+import path from 'path';
 
 /**
  * Helper class to calculate adjusted gas value that is higher than estimate
@@ -47,7 +49,7 @@ const initProvider = (): Web3BaseProvider => {
 /**
  * Get an account given its name
  * @param {typeof Web3} Web3 Web3 provider
- * @param {string} name Account name 
+ * @param {string} name Account name
  */
 const getAccount = (web3: typeof Web3, name: string) => {
     try {
@@ -156,7 +158,7 @@ const getABI = (contractName: string, buildPath: string): AbiStruct => {
     }
 
     // Transact with deployed contract
-    
+
     const abi = getABI(contractName, buildPath)
     const contractDeployed = new web3.eth.Contract(abi, contractAddress)
 
