@@ -1,0 +1,3 @@
+* hardhat basic example
+
+copy from [[https://hardhat.org/hardhat-runner/docs/guides/typescript][TypeScript configuration]]
