@@ -12,18 +12,18 @@
   </div>
 </template>
 
-<script>
- export default {
-   data() {
-     return {
-       name: '',
-     };
+<script lang="ts">
+ import { defineComponent, ref } from 'vue';
+
+ export default defineComponent({
+   setup() {
+     const name = ref('');
+     return { name };
    },
- };
+ });
 </script>
 
 <style scoped>
- /* Add any component-specific styles here */
  label {
    display: flex;
    flex-direction: column;
