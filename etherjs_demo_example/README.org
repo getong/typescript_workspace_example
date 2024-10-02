@@ -1,0 +1,19 @@
+* ethersjs demo example
+
+commands:
+
+#+begin_src shell
+mkdir etherjs_demo_example
+cd etherjs_demo_example
+npm init -y
+
+npm install typescript ts-node @types/node ethers --save-dev
+npx tsc --init
+npx tsc
+
+# run the script
+npx ts-node src/script.ts
+
+# or run with node
+node dist/script.js
+#+end_src
