@@ -1,0 +1,13 @@
+* hardhat demo example
+
+command
+
+#+begin_src shell
+npm install --save-dev hardhat
+
+mkdir hardhat_demo_example
+
+cd hardhat_demo_example
+
+npx hardhat init
+#+end_src
