@@ -1,6 +1,6 @@
 * hardhat demo example
 
-command
+** create hardhat demo example
 
 #+begin_src shell
 npm install --save-dev hardhat
@@ -10,4 +10,39 @@ mkdir hardhat_demo_example
 cd hardhat_demo_example
 
 npx hardhat init
+#+end_src
+
+
+** compile project
+
+#+begin_src shell
+npx hardhat compile
+#+end_src
+
+
+** clean
+
+#+begin_src shell
+npx hardhat clean
+#+end_src
+
+
+** test
+
+#+begin_src shell
+npx hardhat test
+#+end_src
+
+
+** coverage
+
+#+begin_src shell
+npx hardhat coverage
+#+end_src
+
+
+** running local node
+
+#+begin_src shell
+npx hardhat node
 #+end_src
