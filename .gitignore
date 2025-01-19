@@ -83,3 +83,5 @@ TEST-results.xml
 /lib/
 **/*.bak
 **/bun.lockb
+**/.output
+**/.vinxi

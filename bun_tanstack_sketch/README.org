@@ -1,0 +1,24 @@
+* bun_tanstack_sketch
+:PROPERTIES:
+:CUSTOM_ID: bun_tanstack_sketch
+:END:
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run src/index.tsx
+#+end_src
+
+This project was created using =bun init= in bun v1.1.42.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
+
+
+** tanstack get started example
+
+copy from [[https://tanstack.com/router/latest/docs/framework/react/start/build-from-scratch][Build a Project from Scratch]]
+also see [[https://zenn.dev/gemcook/articles/909eaf62eab51d][BetaになったTanStack Startを触るぞ！！！]]
