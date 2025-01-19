@@ -1,0 +1,106 @@
+* bun_min_react_sketch
+:PROPERTIES:
+:CUSTOM_ID: bun_min_react_sketch
+:END:
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run src/index.tsx
+#+end_src
+
+This project was created using =bun init= in bun v1.1.42.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
+
+
+** create with bun from stratch
+
+*** init project
+
+#+begin_src shell
+$ mkdir bun_min_react_sketch
+$ cd bun_min_react_sketch
+$ bun init
+src/index.tsx
+
+bun run src/index.tsx
+bun add react react-dom @types/react @types/react-dom @types/web
+#+end_src
+
+*** src/index.tsx
+
+#+begin_src typescript
+import { StrictMode } from "react"
+import { createRoot } from "react-dom/client"
+import { App } from "./App"
+
+const rootElement = document.getElementById("root")! // これが取得できなければエラーで止まるべき
+const root = createRoot(rootElement)
+root.render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+)
+#+end_src
+
+*** src/App.tsx
+
+#+begin_src typescript
+import { useState } from "react"
+
+export const App = () => {
+  const [cnt, setCnt] = useState(0)
+  return (
+    <div>
+      <h1>bun!</h1>
+      <button onClick={() => setCnt((prev) => prev + 1)}>count: {cnt}</button>
+    </div>
+  )
+}
+
+#+end_src
+
+*** index.html
+
+#+begin_src html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bun-Minimal-React</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      JavaScript is disabled! You need JavaScript to view this page.
+    </noscript>
+    <script src="src/index.js" defer></script>
+  </body>
+</html>
+
+#+end_src
+
+*** bun compile into build/index.js
+
+#+begin_src shell
+$ bun build ./src/index.tsx --outdir ./build
+#+end_src
+
+
+*** open index.html
+in the browser, and open index.html
+
+
+** production mode
+
+#+begin_src shell
+NODE_ENV=production bun build ./src/index.tsx --outdir ./build --minify
+#+end_src
+
+copy from [[https://qiita.com/avaice/items/7823b2b2824c9d3cf416][素のReact with Bun]]

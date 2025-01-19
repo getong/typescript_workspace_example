@@ -82,3 +82,4 @@ TEST-results.xml
 *v8.log
 /lib/
 **/*.bak
+**/bun.lockb
