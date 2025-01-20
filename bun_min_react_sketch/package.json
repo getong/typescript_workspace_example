@@ -3,10 +3,12 @@
   "module": "src/index.tsx",
   "type": "module",
   "scripts": {
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "flow": "flow"
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "flow-bin": "^0.259.1",
     "prettier": "^3.4.2"
   },
   "peerDependencies": {
