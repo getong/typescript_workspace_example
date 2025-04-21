@@ -35,6 +35,9 @@ bun add -D typescript
 ** Run Anvil
 
 #+begin_src shell
+# install foundry
+curl -L https://foundry.paradigm.xyz | bash
+
 anvil
 #+end_src
 
