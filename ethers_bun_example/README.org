@@ -10,6 +10,21 @@ cd ethers_bun_example
 bun init -y
 #+end_src
 
+** To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run index.ts
+#+end_src
+
+This project was created using =bun init= in bun v1.1.40.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
+
 ** add ethers library
 
 #+begin_src shell
