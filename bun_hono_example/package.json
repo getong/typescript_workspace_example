@@ -2,6 +2,9 @@
   "name": "bun_hono_example",
   "module": "src/main.tsx",
   "type": "module",
+  "scripts": {
+    "dev": "bun run --host src/main.tsx"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
