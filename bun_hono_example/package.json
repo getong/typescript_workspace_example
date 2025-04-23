@@ -3,7 +3,7 @@
   "module": "src/main.tsx",
   "type": "module",
   "scripts": {
-    "dev": "bun run --host src/main.tsx"
+    "dev": "bun run --hot src/main.tsx"
   },
   "devDependencies": {
     "@types/bun": "latest"
