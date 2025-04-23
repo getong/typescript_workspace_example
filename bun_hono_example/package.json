@@ -3,10 +3,13 @@
   "module": "src/main.tsx",
   "type": "module",
   "scripts": {
-    "dev": "bun run --hot src/main.tsx"
+    "dev": "bun run --hot src/main.tsx",
+    "eslint": "eslint --fix"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@hono/eslint-config": "^2.0.0",
+    "@types/bun": "latest",
+    "eslint": "^9.25.1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
