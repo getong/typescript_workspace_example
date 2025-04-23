@@ -1,0 +1,48 @@
+* bun_hono_example
+:PROPERTIES:
+:CUSTOM_ID: bun_hono_example
+:END:
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run src/main.tsx
+#+end_src
+
+This project was created using =bun init= in bun v1.1.42.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
+
+** add hono
+
+#+begin_src shell
+bun add hono
+#+end_src
+
+** Hello World
+
+src/main.tsx
+
+#+begin_src typescript
+import { Hono } from 'hono'
+
+const app = new Hono()
+app.get('/', (c) => c.text('Hello Bun!'))
+
+export default app
+#+end_src
+
+** run dev
+
+#+begin_src shell
+bun i
+bun run src/main.tsx
+#+end_src
+
+visit http://localhost:3000/
+
+copy from [[https://hono.dev/docs/getting-started/bun][hono and bun]]
