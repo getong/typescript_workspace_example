@@ -1,0 +1,19 @@
+{
+  "name": "bun_nestjs_basic_example",
+  "module": "src/main.tsx",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.0",
+    "@nestjs/core": "^11.1.0",
+    "@nestjs/platform-express": "^11.1.0",
+    "@nestjs/typeorm": "^11.0.0",
+    "pg": "^8.15.5",
+    "typeorm": "^0.3.22"
+  }
+}
