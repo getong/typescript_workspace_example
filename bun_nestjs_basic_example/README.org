@@ -1,0 +1,28 @@
+* bun_nestjs_basic_example
+:PROPERTIES:
+:CUSTOM_ID: bun_nestjs_basic_example
+:END:
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run src/main.tsx
+#+end_src
+
+This project was created using =bun init= in bun v1.1.40.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
+
+** nestjs generate
+
+#+begin_src shell
+bun run nest generate module users
+#+end_src
+
+copy from [[https://medium.com/@ayushagrwl9415/building-a-nestjs-application-from-scratch-a-comprehensive-guide-7a1747453274][Building a NestJS Application from Scratch: A Comprehensive Guide]]
+
+also see [[https://github.com/letstri/bun-nestjs][Nest.js Bun starter]]
