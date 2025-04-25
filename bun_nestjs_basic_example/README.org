@@ -20,7 +20,7 @@ This project was created using =bun init= in bun v1.1.40.
 ** nestjs generate
 
 #+begin_src shell
-bun run nest generate module users
+bun run nest generate resource users
 #+end_src
 
 copy from [[https://medium.com/@ayushagrwl9415/building-a-nestjs-application-from-scratch-a-comprehensive-guide-7a1747453274][Building a NestJS Application from Scratch: A Comprehensive Guide]]
@@ -37,3 +37,25 @@ also see [[https://github.com/letstri/bun-nestjs][Nest.js Bun starter]]
     }
 }
 #+end_src
+
+** nestjs generate second resource
+
+#+begin_src shell
+bun run nest generate resource projects
+#+end_src
+
+output result:
+
+#+begin_quote
+✔ What transport layer do you use? REST API
+✔ Would you like to generate CRUD entry points? Yes
+CREATE src/projects/projects.controller.spec.ts (596 bytes)
+CREATE src/projects/projects.controller.ts (957 bytes)
+CREATE src/projects/projects.module.ts (269 bytes)
+CREATE src/projects/projects.service.spec.ts (474 bytes)
+CREATE src/projects/projects.service.ts (651 bytes)
+CREATE src/projects/dto/create-project.dto.ts (33 bytes)
+CREATE src/projects/dto/update-project.dto.ts (181 bytes)
+CREATE src/projects/entities/project.entity.ts (24 bytes)
+UPDATE src/app.module.ts (236 bytes)
+#+end_quote
