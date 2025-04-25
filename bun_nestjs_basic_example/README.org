@@ -26,3 +26,14 @@ bun run nest generate module users
 copy from [[https://medium.com/@ayushagrwl9415/building-a-nestjs-application-from-scratch-a-comprehensive-guide-7a1747453274][Building a NestJS Application from Scratch: A Comprehensive Guide]]
 
 also see [[https://github.com/letstri/bun-nestjs][Nest.js Bun starter]]
+
+** set emitDecoratorMetadata true
+
+#+begin_src typescript
+// tsconfig.json
+{
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+    }
+}
+#+end_src
