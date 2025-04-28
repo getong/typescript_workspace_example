@@ -8,11 +8,27 @@ To install dependencies:
 bun install
 #+end_src
 
-To run:
+To initialize the database with sample data:
 
 #+begin_src sh
-bun run src/main.tsx
+bun run init:db
 #+end_src
+
+To run the application:
+
+#+begin_src sh
+bun run start:dev
+#+end_src
+
+To clean the database and reinitialize:
+
+#+begin_src sh
+bun run clean:db
+#+end_src
+
+You can access:
+- GraphQL Playground: http://localhost:3010/graphql
+- Client UI Example: http://localhost:3010/graphql-client.html
 
 This project was created using =bun init= in bun v1.1.42.
 [[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.

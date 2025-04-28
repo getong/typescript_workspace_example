@@ -1,0 +1,157 @@
+* Notes API Documentation
+:PROPERTIES:
+:CUSTOM_ID: notes-api-documentation
+:END:
+This document provides examples of how to use the Notes GraphQL API.
+
+** Creating a New Note
+:PROPERTIES:
+:CUSTOM_ID: creating-a-new-note
+:END:
+To create a new note, you need to specify a title, content, and the ID
+of the user who owns the note:
+
+#+begin_src graphql
+mutation {
+  createNote(createNoteInput: {
+    title: "Meeting Notes",
+    content: "Discuss project timeline and assign tasks",
+    userId: 1
+  }) {
+    id
+    title
+    content
+    createdAt
+    userId
+  }
+}
+#+end_src
+
+** Fetching All Notes
+:PROPERTIES:
+:CUSTOM_ID: fetching-all-notes
+:END:
+To retrieve all notes in the system:
+
+#+begin_src graphql
+query {
+  notes {
+    id
+    title
+    content
+    createdAt
+    userId
+    user {
+      id
+      name
+      email
+    }
+  }
+}
+#+end_src
+
+** Fetching a Specific Note by ID
+:PROPERTIES:
+:CUSTOM_ID: fetching-a-specific-note-by-id
+:END:
+To get a specific note by its ID:
+
+#+begin_src graphql
+query {
+  note(id: 1) {
+    id
+    title
+    content
+    createdAt
+    userId
+    user {
+      id
+      name
+      email
+    }
+  }
+}
+#+end_src
+
+** Fetching Notes for a Specific User
+:PROPERTIES:
+:CUSTOM_ID: fetching-notes-for-a-specific-user
+:END:
+To get all notes belonging to a specific user:
+
+#+begin_src graphql
+query {
+  notesByUser(userId: 1) {
+    id
+    title
+    content
+    createdAt
+  }
+}
+#+end_src
+
+** Updating a Note
+:PROPERTIES:
+:CUSTOM_ID: updating-a-note
+:END:
+To update an existing note:
+
+#+begin_src graphql
+mutation {
+  updateNote(updateNoteInput: {
+    id: 1,
+    title: "Updated Meeting Notes",
+    content: "Revised project timeline and task assignments"
+  }) {
+    id
+    title
+    content
+    createdAt
+    userId
+  }
+}
+#+end_src
+
+Note: You only need to include the fields you want to update. The =id=
+field is required to identify the note to update.
+
+** Deleting a Note
+:PROPERTIES:
+:CUSTOM_ID: deleting-a-note
+:END:
+To delete a note by its ID:
+
+#+begin_src graphql
+mutation {
+  removeNote(id: 1) {
+    id
+    title
+    content
+  }
+}
+#+end_src
+
+** Relationship with Users
+:PROPERTIES:
+:CUSTOM_ID: relationship-with-users
+:END:
+Each note belongs to a user. When querying notes, you can include user
+information by requesting the =user= field:
+
+#+begin_src graphql
+query {
+  notes {
+    id
+    title
+    content
+    user {
+      id
+      name
+      email
+    }
+  }
+}
+#+end_src
+
+This will return the notes along with information about the users who
+own them.
