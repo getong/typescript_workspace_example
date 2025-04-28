@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "format": "prettier --write \"src\"",
+    "nbuild": "bun run nest build",
     "start:dev": "bun --watch ./src/main.tsx",
     "start:debug": "nest start --debug --watch",
     "start:prod": "bun ./src/main.tsx",
@@ -34,8 +35,10 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.1.0",
     "@nestjs/typeorm": "^11.0.0",
+    "class-validator": "^0.14.1",
     "graphql": "^16.10.0",
     "pg": "^8.15.5",
+    "sqlite3": "^5.1.7",
     "typeorm": "^0.3.22"
   }
 }

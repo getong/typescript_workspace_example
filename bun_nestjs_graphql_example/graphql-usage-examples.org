@@ -1,0 +1,178 @@
+
+* Using GraphQL in the Browser
+:PROPERTIES:
+:CUSTOM_ID: using-graphql-in-the-browser
+:END:
+** Accessing GraphQL Playground
+:PROPERTIES:
+:CUSTOM_ID: accessing-graphql-playground
+:END:
+1. Start your NestJS application with: =bun --watch ./src/main.tsx=
+2. Open your browser and navigate to: =http://localhost:3010/graphql=
+3. You should see the GraphQL playground interface:
+
+#+begin_example
+[GraphQL Playground Interface would be shown here]
+#+end_example
+
+** Creating a New User
+:PROPERTIES:
+:CUSTOM_ID: creating-a-new-user
+:END:
+1. In the left panel of the playground, enter the following mutation:
+
+#+begin_src graphql
+mutation {
+  createUser(createUserInput: {
+    name: "John Doe",
+    email: "john.doe@example.com"
+  }) {
+    id
+    name
+    email
+  }
+}
+#+end_src
+
+2. [@2] Click the "Play" button in the middle of the screen to execute
+   the mutation.
+3. The result will appear in the right panel:
+
+#+begin_src json
+{
+  "data": {
+    "createUser": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john.doe@example.com"
+    }
+  }
+}
+#+end_src
+
+** Querying Users
+:PROPERTIES:
+:CUSTOM_ID: querying-users
+:END:
+1. Enter a query in the left panel:
+
+#+begin_src graphql
+query {
+  users {
+    id
+    name
+    email
+  }
+}
+#+end_src
+
+2. [@2] Click the "Play" button to see all users in your database.
+
+** Tips for Using GraphQL Playground
+:PROPERTIES:
+:CUSTOM_ID: tips-for-using-graphql-playground
+:END:
+- Use the "DOCS" tab on the right side to explore available queries and
+  mutations
+- Use the "SCHEMA" tab to see the complete GraphQL schema
+- Multiple operations can be defined in a single editor - use the
+  dropdown at the top to select which one to run
+- Variables can be defined in the "QUERY VARIABLES" panel at the bottom
+
+* GraphQL Examples
+:PROPERTIES:
+:CUSTOM_ID: graphql-examples
+:END:
+** Creating a New User
+:PROPERTIES:
+:CUSTOM_ID: creating-a-new-user
+:END:
+To create a new user, use the following mutation in the GraphQL
+playground:
+
+#+begin_src graphql
+mutation {
+  createUser(createUserInput: {
+    name: "John Doe",
+    email: "john.doe@example.com"
+  }) {
+    id
+    name
+    email
+  }
+}
+#+end_src
+
+This mutation: 1. Calls the =createUser= mutation defined in our
+resolver 2. Passes the required data (name and email) 3. Requests the
+fields we want returned after creation (id, name, email)
+
+** Querying All Users
+:PROPERTIES:
+:CUSTOM_ID: querying-all-users
+:END:
+After creating users, you can fetch them with:
+
+#+begin_src graphql
+query {
+  users {
+    id
+    name
+    email
+  }
+}
+#+end_src
+
+** Querying a Single User
+:PROPERTIES:
+:CUSTOM_ID: querying-a-single-user
+:END:
+To get a specific user by ID:
+
+#+begin_src graphql
+query {
+  user(id: 1) {
+    id
+    name
+    email
+  }
+}
+#+end_src
+
+** Updating a User
+:PROPERTIES:
+:CUSTOM_ID: updating-a-user
+:END:
+To update an existing user:
+
+#+begin_src graphql
+mutation {
+  updateUser(updateUserInput: {
+    id: 1,
+    name: "John Updated",
+    email: "john.updated@example.com"
+  }) {
+    id
+    name
+    email
+  }
+}
+#+end_src
+
+** Removing a User
+:PROPERTIES:
+:CUSTOM_ID: removing-a-user
+:END:
+To delete a user:
+
+#+begin_src graphql
+mutation {
+  removeUser(id: 1) {
+    id
+    name
+    email
+  }
+}
+#+end_src
+
+The returned data shows the user that was deleted.
