@@ -38,4 +38,5 @@ This project was created using =bun init= in bun v1.1.42.
 #+begin_src shell
 bun add -D madge
 bunx madge src/main.tsx --image graph.png
+bunx madge src/main.tsx --circular
 #+end_src
