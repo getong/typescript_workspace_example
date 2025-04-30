@@ -6,6 +6,7 @@
     "format": "prettier --write \"src\" \"assets\" package.json tsconfig.json",
     "nbuild": "bun run nest build",
     "start:dev": "bun --watch ./src/main.tsx",
+    "build:react": "react-scripts build --ext .tsx && mv build react-app-build",
     "start:debug": "nest start --debug --watch",
     "start:prod": "bun ./src/main.tsx",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -17,14 +18,17 @@
     "@nestjs/schematics": "^11.0.5",
     "@types/bun": "latest",
     "@types/express": "^5.0.1",
-    "@types/node": "^22.14.1",
-    "@typescript-eslint/eslint-plugin": "^8.31.0",
-    "@typescript-eslint/parser": "^8.31.0",
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
     "eslint": "^9.25.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
     "madge": "^8.0.0",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "react-scripts": "^5.0.1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -39,9 +43,11 @@
     "@nestjs/platform-express": "^11.1.0",
     "@nestjs/typeorm": "^11.0.0",
     "class-validator": "^0.14.1",
-    "graphql": "^16.10.0",
-    "pg": "^8.15.5",
+    "graphql": "^16.11.0",
+    "pg": "^8.15.6",
     "sqlite3": "^5.1.7",
-    "typeorm": "^0.3.22"
+    "typeorm": "^0.3.22",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }
