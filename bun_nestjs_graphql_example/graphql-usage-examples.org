@@ -103,9 +103,10 @@ mutation {
 }
 #+end_src
 
-This mutation: 1. Calls the =createUser= mutation defined in our
-resolver 2. Passes the required data (name and email) 3. Requests the
-fields we want returned after creation (id, name, email)
+This mutation:
+1. Calls the =createUser= mutation defined in our resolver
+2. Passes the required data (name and email)
+3. Requests the fields we want returned after creation (id, name, email)
 
 ** Querying All Users
 :PROPERTIES:
