@@ -2,13 +2,13 @@ import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
 import { Observable } from "rxjs";
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class UserGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    console.log("AuthGuard: Validating request...");
+    console.log("UserGuard: Validating user request...");
     console.log({
       method: request.method,
       url: request.url,
@@ -24,6 +24,9 @@ export class AuthGuard implements CanActivate {
       ip: request.ip,
       timestamp: new Date().toISOString(),
     });
+
+    // Add user-specific validation logic here
+    // For example, check if the request has valid user permissions
 
     return true;
   }
