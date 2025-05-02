@@ -59,3 +59,123 @@ CREATE src/projects/dto/update-project.dto.ts (181 bytes)
 CREATE src/projects/entities/project.entity.ts (24 bytes)
 UPDATE src/app.module.ts (236 bytes)
 #+end_quote
+
+** NestJS Pipeline Components Example
+
+This project demonstrates the use of NestJS pipeline components including middleware, guards, interceptors, and pipes.
+
+*** Project Structure
+
+The application implements several NestJS pipeline components:
+
+- Middleware: Simple request logger
+- Guards: Basic authentication guard
+- Interceptors: Request/response logging
+- Pipes: Request validation
+
+*** Setup and Run
+
+#+BEGIN_SRC bash
+# Install dependencies
+npm install
+
+# Start the application
+npm run start
+
+# Or with Bun
+bun run start
+#+END_SRC
+
+The application will run on http://localhost:3010
+
+*** Testing the Pipeline Components
+
+**** 1. Testing Middleware and Interceptor
+
+Visit the base endpoint to see the middleware and interceptor in action:
+
+#+BEGIN_SRC bash
+curl http://localhost:3010/test
+#+END_SRC
+
+Expected response:
+#+BEGIN_SRC json
+{"message":"Hello from NestJS!"}
+#+END_SRC
+
+In your console logs, you should see:
+#+BEGIN_EXAMPLE
+Request... GET /test
+Before...
+After... [time in ms]
+#+END_EXAMPLE
+
+**** 2. Testing ValidationPipe
+
+Send a POST request with valid data:
+
+#+BEGIN_SRC bash
+curl -X POST http://localhost:3010/test/validate \
+  -H "Content-Type: application/json" \
+  -d '{"name":"John Doe","email":"john@example.com","password":"password123"}'
+#+END_SRC
+
+Expected response for valid data:
+#+BEGIN_SRC json
+{"message":"Validation successful!","user":{"name":"John Doe","email":"john@example.com","password":"password123"}}
+#+END_SRC
+
+Try with invalid data:
+
+#+BEGIN_SRC bash
+curl -X POST http://localhost:3010/test/validate \
+  -H "Content-Type: application/json" \
+  -d '{"name":"","email":"notanemail","password":"123"}'
+#+END_SRC
+
+ValidationPipe will reject this request with validation errors.
+
+**** 3. Testing AuthGuard
+
+Access a protected endpoint:
+
+#+BEGIN_SRC bash
+curl http://localhost:3010/test/protected
+#+END_SRC
+
+Expected response:
+#+BEGIN_SRC json
+{"message":"This is a protected endpoint!"}
+#+END_SRC
+
+Your console logs should show:
+#+BEGIN_EXAMPLE
+AuthGuard: Validating request...
+#+END_EXAMPLE
+
+**** 4. Testing Error Handling
+
+Test how errors are handled through the interceptor:
+
+#+BEGIN_SRC bash
+curl http://localhost:3010/test/error
+#+END_SRC
+
+This should trigger an error that will be logged by the interceptor.
+
+*** Pipeline Implementation Details
+
+The application uses the following pipeline components:
+
+- *Middleware*: Simple logger that logs HTTP request method and URL
+- *Guards*: Basic authentication guard that allows all requests (in a real application, this would validate tokens)
+- *Interceptors*: Logging interceptor that measures request processing time
+- *Pipes*: Validation pipe that ensures request data meets DTO requirements
+
+Each component executes in a specific order when processing requests:
+1. Middleware (first)
+2. Guards
+3. Interceptors (pre-controller)
+4. Pipes
+5. Controller
+6. Interceptors (post-controller)
