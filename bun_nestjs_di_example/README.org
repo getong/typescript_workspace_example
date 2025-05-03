@@ -1,0 +1,66 @@
+* bun_nestjs_di_example
+:PROPERTIES:
+:CUSTOM_ID: bun_nestjs_di_example
+:END:
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run src/main.tsx
+#+end_src
+
+This project was created using =bun init= in bun v1.1.42.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
+
+** add nestjs dependencies
+
+#+begin_src shell
+bun add @nestjs/common \
+  @nestjs/core \
+  @nestjs/mapped-types \
+  @nestjs/platform-express \
+  reflect \
+  reflect-metadata \
+  rxjs
+
+bun add -D typescript \
+  @nestjs/cli \
+  @nestjs/schematics \
+  @nestjs/testing \
+  @nestjs/testing \
+  @types/express \
+  @types/jest \
+  @types/node \
+  @types/supertest \
+  jest \
+  supertest \
+  test-jest \
+  ts-loader \
+  tsconfig-paths \
+  node \
+  @typescript-eslint/eslint-plugin \
+  @typescript-eslint/parser \
+  eslint \
+  eslint-config-prettier \
+  eslint-plugin-prettier
+#+end_src
+
+** generate module
+
+#+begin_src shell
+bun nest generate module computer
+bun nest generate controller computer
+bun nest generate module cpu
+bun nest generate service cpu
+bun nest generate module disk
+bun nest generate service disk
+bun nest generate module power
+bun nest generate service power
+
+bun nest generate module app
+#+end_src
