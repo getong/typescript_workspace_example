@@ -179,3 +179,6 @@ Each component executes in a specific order when processing requests:
 4. Pipes
 5. Controller
 6. Interceptors (post-controller)
+
+** nestjs component data flow
+pipe -> guard -> controller -> service -> repository
