@@ -1,0 +1,63 @@
+#+TITLE: Bun IPFS Example
+
+* Bun IPFS Example
+
+This project demonstrates how to interact with IPFS using the ipfs-http-client library in a TypeScript project running with Bun.
+
+** Prerequisites
+
+- [[https://bun.sh][Bun]] installed
+- Docker installed (for running IPFS daemon)
+
+** Running IPFS Daemon using Docker
+
+To run an IPFS node locally using Docker, execute the following command:
+
+#+begin_src bash
+docker run -d \
+  --name ipfs-node \
+  -p 4001:4001 \
+  -p 4001:4001/udp \
+  -p 127.0.0.1:8080:8080 \
+  -p 127.0.0.1:5001:5001 \
+  -v ipfs-data:/data/ipfs \
+  ipfs/kubo:master-2025-04-30-7059620
+#+end_src
+
+This command:
+- Creates a container named ~ipfs-node~
+- Exposes the necessary ports:
+  - 4001: IPFS swarm port (TCP and UDP)
+  - 8080: IPFS gateway
+  - 5001: IPFS API port
+- Creates a persistent volume named ~ipfs-data~ for IPFS data
+- Uses the latest version of ~ipfs/kubo~ image
+
+** Accessing the IPFS Web UI
+
+Once the IPFS node is running, you can access the Web UI at:
+http://localhost:5001/webui
+
+** Using the Project
+
+1. Install dependencies:
+   #+begin_src bash
+   bun install
+   #+end_src
+
+2. Run the example script:
+   #+begin_src bash
+   bun run src/main.ts
+   #+end_src
+
+** Stopping the IPFS Daemon
+
+To stop the IPFS container:
+#+begin_src bash
+docker stop ipfs-node
+#+end_src
+
+To remove the container:
+#+begin_src bash
+docker rm ipfs-node
+#+end_src
