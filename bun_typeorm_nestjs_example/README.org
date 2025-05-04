@@ -1,0 +1,79 @@
+#+TITLE: Bun TypeORM NestJS Example
+
+** bun init project
+
+#+begin_src shell
+bun init
+bun add typeorm pg reflect-metadata dotenv
+bun typeorm init --database postgresql
+#+end_src
+
+* bun_typeorm_nestjs_example
+:PROPERTIES:
+:CUSTOM_ID: bun_typeorm_nestjs_example
+:END:
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run src/main.rs
+#+end_src
+
+This project was created using =bun init= in bun v1.1.42.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
+
+* Setup Instructions
+
+** Installing Dependencies
+
+   Run the following command to install TypeORM, PostgreSQL driver, and dotenv:
+
+   #+BEGIN_SRC bash
+   bun add typeorm pg reflect-metadata dotenv
+   #+END_SRC
+
+** Initialize TypeORM with PostgreSQL
+
+   Run the following command to initialize TypeORM with PostgreSQL:
+
+   #+BEGIN_SRC bash
+   bun typeorm init --database postgresql
+   #+END_SRC
+
+** Environment Configuration
+
+   1. Create a .env file in the project root:
+
+      #+BEGIN_SRC bash
+      touch .env
+      #+END_SRC
+
+   2. Add the following environment variables to the .env file:
+
+      #+BEGIN_SRC
+      DB_HOST=localhost
+      DB_PORT=5432
+      DB_USERNAME=your_username
+      DB_PASSWORD=your_password
+      DB_DATABASE=your_database
+      #+END_SRC
+
+** Running the Application
+
+   Start your application using:
+
+   #+BEGIN_SRC bash
+   bun run src/main.ts
+   #+END_SRC
+
+* Project Structure
+
+  - src/main: Main entry point with TypeORM configuration
+  - .env: Environment variables for database connection
+  - entities/: [TODO] Add your TypeORM entities here
+  - migrations/: [TODO] Database migrations will be stored here
