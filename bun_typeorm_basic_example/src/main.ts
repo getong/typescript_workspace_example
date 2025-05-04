@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import * as dotenv from "dotenv";
+import dotenv from "dotenv";
 import { AppDataSource } from "./data-source";
 
 // Load environment variables

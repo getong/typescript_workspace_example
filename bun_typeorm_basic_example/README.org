@@ -1,4 +1,4 @@
-#+TITLE: Bun TypeORM NestJS Example
+#+TITLE: Bun TypeORM basic Example
 
 ** bun init project
 
@@ -8,9 +8,9 @@ bun add typeorm pg reflect-metadata dotenv
 bun typeorm init --database postgresql
 #+end_src
 
-* bun_typeorm_nestjs_example
+* bun_typeorm_basic_example
 :PROPERTIES:
-:CUSTOM_ID: bun_typeorm_nestjs_example
+:CUSTOM_ID: bun_typeorm_basic_example
 :END:
 To install dependencies:
 

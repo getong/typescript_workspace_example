@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { User } from "./entity/User";
-import * as dotenv from "dotenv";
+import dotenv from "dotenv";
 
 // Load environment variables from .env file
 dotenv.config();

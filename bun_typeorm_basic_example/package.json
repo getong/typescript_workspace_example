@@ -1,5 +1,5 @@
 {
-  "name": "bun_typeorm_nestjs_example",
+  "name": "bun_typeorm_basic_example",
   "module": "src/main.ts",
   "type": "module",
   "devDependencies": {
