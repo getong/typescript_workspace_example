@@ -1,0 +1,6 @@
+[build]
+entrypoints = ["./src/main.ts"]
+outdir = "./dist"
+target = "node"
+minify = true
+format = "esm"

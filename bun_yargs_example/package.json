@@ -1,0 +1,25 @@
+{
+  "name": "bun_yargs_example",
+  "module": "src/main.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "yargs": "^17.7.2",
+    "@types/yargs": "^17.0.32"
+  },
+  "scripts": {
+    "start": "bun run src/main.ts",
+    "build": "mkdir -p dist && bun build ./src/main.ts --outfile=./dist/cli.js --target=node",
+    "greet": "bun run src/main.ts greet --name 'User'",
+    "greet:world": "bun run src/main.ts greet --name 'World'",
+    "add": "bun run src/main.ts add"
+  },
+  "bin": {
+    "bun-cli": "./dist/cli.js"
+  }
+}

@@ -1,0 +1,56 @@
+* bun_yargs_example
+:PROPERTIES:
+:CUSTOM_ID: bun_yargs_example
+:END:
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run start
+#+end_src
+
+** Available Commands
+
+*** Greet
+Greet someone with optional repetitions:
+
+#+begin_src sh
+# Basic greeting with default name
+bun run greet
+
+# Custom greeting
+bun run src/main.ts greet --name "World" --verbose --n 3
+
+# Or using the npm script and passing additional parameters
+bun run greet -- --verbose --n 3
+#+end_src
+
+*** Add
+Add two numbers:
+
+#+begin_src sh
+bun run src/main.ts add 5 7
+
+# Or using npm script
+bun run add -- 5 7
+#+end_src
+
+** Help
+Display help information for any command:
+
+#+begin_src sh
+# General help
+bun run src/main.ts --help
+
+# Command-specific help
+bun run src/main.ts greet --help
+bun run src/main.ts add --help
+#+end_src
+
+This project was created using =bun init= in bun v1.1.42.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
