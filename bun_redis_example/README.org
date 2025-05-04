@@ -1,0 +1,38 @@
+* bun_redis_example
+:PROPERTIES:
+:CUSTOM_ID: bun_redis_example
+:END:
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run src/main.ts
+#+end_src
+
+** Redis Setup
+This example requires a Redis server running. You can:
+
+1. Use a local Redis instance:
+#+begin_src sh
+# Install and start Redis locally (macOS)
+brew install redis
+brew services start redis
+#+end_src
+
+2. Use Docker:
+#+begin_src sh
+docker run -p 6379:6379 --name redis-instance -d redis
+#+end_src
+
+3. Specify a custom Redis URL using environment variable:
+#+begin_src sh
+REDIS_URL=redis://username:password@host:port bun run src/main.ts
+#+end_src
+
+This project was created using =bun init= in bun v1.1.42.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
