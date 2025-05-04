@@ -1,4 +1,8 @@
+import dotenv from "dotenv";
 import { RedisService } from "./services/redis.service";
+
+// Load environment variables from .env file
+dotenv.config();
 
 async function main() {
   console.log("Hello via Bun with Redis!");

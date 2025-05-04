@@ -11,8 +11,21 @@ bun install
 To run:
 
 #+begin_src sh
-bun run src/main.ts
+bun run start
 #+end_src
+
+** Environment Variables
+This project uses dotenv for environment configuration. Create a `.env` file based on `.env.example`:
+
+#+begin_src sh
+cp .env.example .env
+# Then edit .env with your configuration
+#+end_src
+
+Environment variables supported:
+- REDIS_URL: Redis server URL (default: redis://localhost:6379)
+- REDIS_USERNAME: Redis username (if authentication is required)
+- REDIS_PASSWORD: Redis password (if authentication is required)
 
 ** Redis Setup
 This example requires a Redis server running. You can:

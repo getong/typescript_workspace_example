@@ -7,6 +7,8 @@ export class RedisService {
   private constructor() {
     this.client = createClient({
       url: process.env.REDIS_URL || "redis://localhost:6379",
+      username: process.env.REDIS_USERNAME,
+      password: process.env.REDIS_PASSWORD,
     });
 
     this.client.on("error", (err) => console.error("Redis Client Error", err));
