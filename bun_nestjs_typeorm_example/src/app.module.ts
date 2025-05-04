@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from './entities/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { User } from './entities/user.entity';
         synchronize: configService.get<boolean>('DB_SYNCHRONIZE'),
       }),
     }),
-    TypeOrmModule.forFeature([User]),
+      TypeOrmModule.forFeature([User]),
+      UsersModule,
   ],
 })
 export class AppModule {}

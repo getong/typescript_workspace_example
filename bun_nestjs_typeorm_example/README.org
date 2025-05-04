@@ -1,60 +1,109 @@
-#+TITLE: Bun NestJS TypeORM PostgreSQL Example
-#+AUTHOR:
-#+DATE:
+#+TITLE: NestJS TypeORM PostgreSQL CRUD Example
 
-* Bun NestJS TypeORM PostgreSQL Example
 
-This project demonstrates how to use NestJS with TypeORM for PostgreSQL database interactions using Bun as the JavaScript runtime.
+* NestJS PostgreSQL CRUD Example
+
+This project demonstrates how to perform CRUD operations with NestJS, TypeORM, and PostgreSQL using Bun as the runtime.
 
 ** Prerequisites
-
 - Bun installed
-- PostgreSQL installed and running
-- PostgreSQL client tools (for database creation)
+- PostgreSQL database server
+- Git
 
-** Setup
+** Setup Instructions
 
-1. Clone the repository
-2. Install dependencies:
-   #+BEGIN_SRC shell
-   bun install
-   #+END_SRC
-
-3. Create a =.env= file in the project root with the following content:
-   #+BEGIN_SRC
-   PORT=3000
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_USERNAME=postgres
-   DB_PASSWORD=postgres
-   DB_DATABASE=nest_example
-   DB_SYNCHRONIZE=true
-   #+END_SRC
-
-   Adjust the values according to your PostgreSQL configuration.
-
-4. Create the PostgreSQL database:
-   #+BEGIN_SRC shell
-   bun run create-db
-   #+END_SRC
-
-   This command will:
-   - Load environment variables from the .env file
-   - Use credentials from the .env file to create a new PostgreSQL database
-   - The database name is taken from DB_DATABASE in your .env file
-
-** Running the Application
-
-Start the application with:
-
-#+BEGIN_SRC shell
-bun run src/main.ts
+*** 1. Clone the repository
+#+BEGIN_SRC bash
+git clone <repository-url>
+cd bun_nestjs_typeorm_example
 #+END_SRC
 
-The application will be available at http://localhost:3000 (or the port specified in your .env file).
+*** 2. Install dependencies
+#+BEGIN_SRC bash
+bun install
+#+END_SRC
+
+*** 3. Set up PostgreSQL
+
+Create a new PostgreSQL database:
+
+#+BEGIN_SRC bash
+# Connect to PostgreSQL
+psql -U postgres
+
+# Create database
+CREATE DATABASE nestjs_demo;
+
+# Exit psql
+\q
+#+END_SRC
+
+*** 4. Configure database connection
+
+Update database connection settings in ~src/app.module.ts~ if needed:
+
+#+BEGIN_SRC typescript
+TypeOrmModule.forRoot({
+  type: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  username: 'postgres',
+  password: 'postgres',
+  database: 'nestjs_demo',
+  entities: [__dirname + '/**/*.entity{.ts,.js}'],
+  synchronize: true, // only for development
+}),
+#+END_SRC
+
+*** 5. Run the application
+#+BEGIN_SRC bash
+bun run start
+#+END_SRC
+
+The application should be running at http://localhost:3000
+
+** CRUD Operations API
+
+*** Create a new User
+#+BEGIN_SRC bash
+curl -X POST http://localhost:3000/users \
+  -H "Content-Type: application/json" \
+  -d '{"firstName": "John", "lastName": "Doe", "email": "john.doe@example.com"}'
+#+END_SRC
+
+*** Get all Users
+#+BEGIN_SRC bash
+curl http://localhost:3000/users
+#+END_SRC
+
+*** Get a specific User
+#+BEGIN_SRC bash
+curl http://localhost:3000/users/1
+#+END_SRC
+
+*** Update a User
+#+BEGIN_SRC bash
+curl -X PUT http://localhost:3000/users/1 \
+  -H "Content-Type: application/json" \
+  -d '{"firstName": "John", "lastName": "Smith"}'
+#+END_SRC
+
+*** Delete a User
+#+BEGIN_SRC bash
+curl -X DELETE http://localhost:3000/users/1
+#+END_SRC
 
 ** Project Structure
 
-- =src/main.ts=: Application entry point
-- =src/app.module.ts=: Main module configuration with TypeORM setup
-- =src/entities/=: TypeORM entity definitions
+- ~src/app.module.ts~ - Main application module with database configuration
+- ~src/main.ts~ - Application entry point
+- ~src/users/user.entity.ts~ - User database model
+- ~src/users/users.module.ts~ - Users module configuration
+- ~src/users/users.service.ts~ - Service for database operations
+- ~src/users/users.controller.ts~ - API endpoints for User CRUD operations
+
+** Notes
+
+- The ~synchronize: true~ option in TypeORM configuration automatically creates database tables based on entities, but should be disabled in production.
+- For production, consider using database migrations rather than synchronize.
+- Make sure to secure your database credentials in a production environment using environment variables.
