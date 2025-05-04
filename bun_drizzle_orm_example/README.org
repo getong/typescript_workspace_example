@@ -1,0 +1,57 @@
+* bun_drizzle_orm_example
+:PROPERTIES:
+:CUSTOM_ID: bun_drizzle_orm_example
+:END:
+A Bun project with Drizzle ORM and PostgreSQL integration.
+
+** Prerequisites
+:PROPERTIES:
+:CUSTOM_ID: prerequisites
+:END:
+- [[https://bun.sh][Bun]] installed
+- PostgreSQL server running
+
+** Setup
+:PROPERTIES:
+:CUSTOM_ID: setup
+:END:
+1. Install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+2. [@2] Configure your database:
+
+Create a PostgreSQL database and update the =.env= file with your
+connection string:
+
+#+begin_example
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/drizzle_example
+#+end_example
+
+3. [@3] Run migrations:
+
+#+begin_src sh
+bun run migrate
+#+end_src
+
+** Running the application
+:PROPERTIES:
+:CUSTOM_ID: running-the-application
+:END:
+#+begin_src sh
+bun run start
+#+end_src
+
+** Features
+:PROPERTIES:
+:CUSTOM_ID: features
+:END:
+- PostgreSQL integration with Drizzle ORM
+- Environment variable configuration
+- Basic CRUD operations example
+
+This project was created using =bun init= in bun v1.1.42 and enhanced
+with Drizzle ORM. [[https://bun.sh][Bun]] is a fast all-in-one
+JavaScript runtime.

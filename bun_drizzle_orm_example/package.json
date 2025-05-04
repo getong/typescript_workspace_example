@@ -1,0 +1,25 @@
+{
+  "name": "bun_drizzle_orm_example",
+  "module": "src/main.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.11.14"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.43.1",
+    "drizzle-kit": "^0.31.1",
+    "pg": "^8.15.6"
+  },
+  "scripts": {
+    "start": "bun run src/main.ts",
+    "generate": "bunx drizzle-kit generate:pg",
+    "push": "bunx drizzle-kit push:pg",
+    "db:create": "bun run src/db/init.ts",
+    "db:migrate": "bun run src/db/migrate.ts",
+    "setup": "bun run db:create && bun run db:migrate"
+  }
+}
