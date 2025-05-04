@@ -21,6 +21,7 @@
     "start": "ts-node src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs",
     "create-db": "bun run src/create-database.ts",
-    "setup": "bun run create-db && bun run start"
+    "setup": "bun run create-db && bun run start",
+    "crud-demo": "bun run src/crud-demo.ts"
   }
 }
