@@ -134,6 +134,15 @@ mutation {
 :PROPERTIES:
 :CUSTOM_ID: middleware-usage
 :END:
+
+*** create middleware via cli:
+
+#+begin_src shell
+bun nest generate middleware users/middlewares/example
+
+bun nest generate middleware users/middlewares/another
+#+end_src
+
 This project demonstrates NestJS middleware with the Users module:
 
 #+begin_src typescript
