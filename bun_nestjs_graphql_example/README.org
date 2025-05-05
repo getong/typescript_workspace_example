@@ -58,3 +58,112 @@ Steps to run this project:
 1. Run =npm i= command
 2. Setup database settings inside =data-source.ts= file
 3. Run =npm start= command
+
+** Project Structure
+:PROPERTIES:
+:CUSTOM_ID: project-structure
+:END:
+This project follows a modular architecture with the following structure:
+
+- =src/= - Main source directory
+  - =users/= - User module (GraphQL and REST endpoints)
+  - =notes/= - Notes module (GraphQL endpoints)
+  - =database/= - Database configuration and seeder
+  - =graphql/= - GraphQL configuration
+  - =typeorm/= - TypeORM configuration
+  - =main.tsx= - Application entry point
+
+** API Documentation
+:PROPERTIES:
+:CUSTOM_ID: api-documentation
+:END:
+*** REST Endpoints
+:PROPERTIES:
+:CUSTOM_ID: rest-endpoints
+:END:
+The project includes REST API endpoints for the Users resource:
+
+| Method | Endpoint     | Description         | Response Codes                |
+|--------+-------------+---------------------+------------------------------|
+| GET    | /users      | Get all users       | 200 OK                       |
+| GET    | /users/:id  | Get specific user   | 200 OK, 404 Not Found        |
+| POST   | /users      | Create a new user   | 201 Created, 400 Bad Request |
+| HEAD   | /users/:id  | Check user exists   | 200 OK, 404 Not Found        |
+| DELETE | /users/:id  | Delete a user       | 204 No Content, 404 Not Found|
+
+*** GraphQL API
+:PROPERTIES:
+:CUSTOM_ID: graphql-api
+:END:
+The GraphQL API provides full CRUD operations for both Users and Notes:
+
+**** Users Query/Mutation Examples:
+#+begin_src graphql
+# Get all users
+query {
+  users {
+    id
+    name
+    email
+  }
+}
+
+# Get specific user
+query {
+  user(id: 1) {
+    id
+    name
+    email
+  }
+}
+
+# Create user
+mutation {
+  createUser(createUserInput: {
+    name: "John Doe",
+    email: "john@example.com"
+  }) {
+    id
+    name
+    email
+  }
+}
+#+end_src
+
+** Middleware Usage
+:PROPERTIES:
+:CUSTOM_ID: middleware-usage
+:END:
+This project demonstrates NestJS middleware with the Users module:
+
+#+begin_src typescript
+// Example middleware in users/middlewares/example/example.middleware.ts
+@Injectable()
+export class ExampleMiddleware implements NestMiddleware {
+  use(req: Request, res: Response, next: NextFunction) {
+    // Log incoming requests
+    console.log(`${req.method} ${req.path}`);
+    // Add timestamp
+    req['timestamp'] = new Date().toISOString();
+    next();
+  }
+}
+#+end_src
+
+To create your own middleware:
+
+1. Create a new middleware file in the appropriate module directory
+2. Implement the =NestMiddleware= interface
+3. Register your middleware in the module's =configure()= method
+
+** Development Commands
+:PROPERTIES:
+:CUSTOM_ID: development-commands
+:END:
+| Command                | Description                               |
+|------------------------+------------------------------------------|
+| =bun run format=       | Format code with Prettier                |
+| =bun run start:dev=    | Start development server with hot reload |
+| =bun run lint=         | Run ESLint to check code quality         |
+| =bun run init:db=      | Initialize database with sample data     |
+| =bun run clean:db=     | Clean and reinitialize database          |

@@ -50,4 +50,14 @@ export class UsersService {
     await this.usersRepository.delete(id);
     return user;
   }
+
+  async checkExists(id: string): Promise<void> {
+    this.logger.log(`Checking if user with ID ${id} exists`);
+    const userId = parseInt(id);
+    const exists = await this.usersRepository.exist({ where: { id: userId } });
+    if (!exists) {
+      this.logger.warn(`User with ID ${id} not found during existence check`);
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+  }
 }
