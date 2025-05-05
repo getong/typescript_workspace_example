@@ -28,8 +28,7 @@ bun add @nestjs/common \
   reflect-metadata \
   rxjs
 
-bun add -D typescript \
-  @nestjs/cli \
+bun add -D @nestjs/cli \
   @nestjs/schematics \
   @nestjs/testing \
   @nestjs/testing \
