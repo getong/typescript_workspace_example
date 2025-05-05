@@ -1,0 +1,18 @@
+* bun_nestjs_loop_example
+:PROPERTIES:
+:CUSTOM_ID: bun_nestjs_loop_example
+:END:
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run src/main.ts
+#+end_src
+
+This project was created using =bun init= in bun v1.1.42.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
