@@ -165,6 +165,78 @@ To create your own middleware:
 2. Implement the =NestMiddleware= interface
 3. Register your middleware in the module's =configure()= method
 
+** Interceptors
+:PROPERTIES:
+:CUSTOM_ID: interceptors
+:END:
+
+*** Creating interceptors via cli:
+
+#+begin_src shell
+bun nest generate interceptor common/interceptors/logging
+#+end_src
+
+Interceptors in NestJS implement the =NestInterceptor= interface and provide a powerful way to:
+
+- Bind extra logic before/after method execution
+- Transform the result returned from a function
+- Transform exceptions thrown from a function
+- Extend basic function behavior
+- Completely override a function based on specific conditions
+
+Example logging interceptor:
+
+#+begin_src typescript
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+  private readonly logger = new Logger(LoggingInterceptor.name);
+
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const now = Date.now();
+    const requestInfo = this.getRequestInfo(context);
+    
+    this.logger.log(`Request started: ${requestInfo}`);
+    
+    return next.handle().pipe(
+      tap({
+        next: () => {
+          const duration = Date.now() - now;
+          this.logger.log(`Request completed: ${requestInfo} (${duration}ms)`);
+        },
+        error: (err) => {
+          const duration = Date.now() - now;
+          this.logger.error(`Request failed: ${requestInfo} (${duration}ms)`, err.stack);
+        }
+      }),
+    );
+  }
+}
+#+end_src
+
+*** Using interceptors
+
+To apply an interceptor to a specific controller or method:
+
+#+begin_src typescript
+@UseInterceptors(LoggingInterceptor)
+@Controller('users')
+export class UsersController {}
+#+end_src
+
+To apply globally:
+
+#+begin_src typescript
+@Module({
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ],
+})
+export class AppModule {}
+#+end_src
+
 ** Development Commands
 :PROPERTIES:
 :CUSTOM_ID: development-commands
