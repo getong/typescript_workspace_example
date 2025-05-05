@@ -14,5 +14,54 @@ To run:
 bun run src/main.ts
 #+end_src
 
+* Background Processing Features
+:PROPERTIES:
+:CUSTOM_ID: background-processing-features
+:END:
+
+This application includes background processing capabilities using NestJS Scheduling module and Axios for HTTP requests.
+
+** Scheduled Tasks
+:PROPERTIES:
+:CUSTOM_ID: scheduled-tasks
+:END:
+
+The application runs the following scheduled tasks:
+
+- Products update: Runs every 30 minutes to fetch product data from DummyJSON API
+- Quick updates: Runs every minute to fetch users and categories information
+- Initial data load: Runs once 5 seconds after application startup
+
+** API Endpoints
+:PROPERTIES:
+:CUSTOM_ID: api-endpoints
+:END:
+
+Access the background data through these endpoints:
+
+#+begin_src 
+GET /tasks/cached-data?key=<keyName>  # Get specific cached data by key
+GET /tasks/products                   # Get cached product data
+GET /tasks/users                      # Get cached user data
+GET /tasks/categories                 # Get cached categories data
+
+POST /tasks/fetch-data                # Manually fetch data (requires URL in request body)
+POST /tasks/refresh/products          # Manually refresh product data
+POST /tasks/refresh/quick-updates     # Manually refresh users and categories data
+#+end_src
+
+** Example Usage
+:PROPERTIES:
+:CUSTOM_ID: example-usage
+:END:
+
+Fetch data from a custom URL:
+
+#+begin_src sh
+curl -X POST http://localhost:3010/tasks/fetch-data \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://dummyjson.com/products/1"}'
+#+end_src
+
 This project was created using =bun init= in bun v1.1.42.
 [[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
