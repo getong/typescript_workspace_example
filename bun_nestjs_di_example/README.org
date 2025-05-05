@@ -63,3 +63,7 @@ bun nest generate service power
 
 bun nest generate module app
 #+end_src
+
+** nestjs cli usage doc
+
+see [[https://docs.nestjs.com/cli/usages][CLI command reference]]
