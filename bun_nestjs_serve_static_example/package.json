@@ -1,0 +1,23 @@
+{
+  "name": "bun_nestjs_serve_static_example",
+  "module": "src/main.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/main.ts",
+    "dev": "bun --watch src/main.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.0",
+    "@nestjs/core": "^11.1.0",
+    "@nestjs/platform-express": "^11.1.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^22.15.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
