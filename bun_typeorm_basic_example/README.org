@@ -34,7 +34,7 @@ This project was created using =bun init= in bun v1.1.42.
    Run the following command to install TypeORM, PostgreSQL driver, and dotenv:
 
    #+BEGIN_SRC bash
-   bun add typeorm pg reflect-metadata dotenv
+   bun add @nestjs/typeorm typeorm pg reflect-metadata dotenv
    #+END_SRC
 
 ** Initialize TypeORM with PostgreSQL
