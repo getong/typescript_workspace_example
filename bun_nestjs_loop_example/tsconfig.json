@@ -3,13 +3,13 @@
     // Enable latest features
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
-    "module": "NodeNext", // Changed from ESNext to NodeNext for better compatibility
+    "module": "commonjs",
     "moduleDetection": "force",
     "jsx": "react-jsx",
     "allowJs": true,
 
     // Bundler mode
-    "moduleResolution": "NodeNext", // Changed from bundler to NodeNext
+    "moduleResolution": "commonjs",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
