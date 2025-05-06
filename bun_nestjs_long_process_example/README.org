@@ -1,0 +1,121 @@
+* bun_nestjs_long_process_example
+:PROPERTIES:
+:CUSTOM_ID: bun_nestjs_long_process_example
+:END:
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run src/main.ts
+#+end_src
+
+This project was created using =bun init= in bun v1.1.42.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
+
+* Project Overview
+:PROPERTIES:
+:CUSTOM_ID: project-overview
+:END:
+
+This project demonstrates how to handle long-running tasks in NestJS without blocking the main thread using worker threads.
+
+* Step by Step Guide
+:PROPERTIES:
+:CUSTOM_ID: step-by-step-guide
+:END:
+
+** Installation
+:PROPERTIES:
+:CUSTOM_ID: installation
+:END:
+
+1. Clone the repository
+2. Install dependencies:
+   #+begin_src sh
+   bun install
+   #+end_src
+
+** Project Structure
+:PROPERTIES:
+:CUSTOM_ID: project-structure
+:END:
+
+- =src/main.ts= - NestJS application bootstrap
+- =src/app.module.ts= - Root module configuration
+- =src/long-process.controller.ts= - Controller to handle API requests
+- =src/long-process.service.ts= - Service to manage long-running tasks
+- =src/workers/long-process.worker.ts= - Worker thread implementation for CPU-intensive tasks
+
+** How It Works
+:PROPERTIES:
+:CUSTOM_ID: how-it-works
+:END:
+
+1. When a request comes in to start a long process, the service creates a unique task ID
+2. A worker thread is spawned to handle the heavy computation
+3. The main thread immediately returns the task ID to the client
+4. The client can poll the status endpoint to check if the task is complete
+5. When the worker finishes, it sends the result back to the main thread
+
+* Testing the Code
+:PROPERTIES:
+:CUSTOM_ID: testing-the-code
+:END:
+
+1. Start the NestJS application:
+   #+begin_src sh
+   bun run src/main.ts
+   #+end_src
+
+2. Start a long-running task with cURL:
+   #+begin_src sh
+   curl -X POST http://localhost:3000/long-process/start \
+     -H "Content-Type: application/json" \
+     -d '{"duration": 10}'
+   #+end_src
+
+   This will return a task ID like:
+   #+begin_src json
+   {"taskId":"123e4567-e89b-12d3-a456-426614174000","message":"Task started"}
+   #+end_src
+
+3. Check the status of your task (replace with your actual taskId):
+   #+begin_src sh
+   curl -X GET http://localhost:3000/long-process/status/123e4567-e89b-12d3-a456-426614174000 \
+     -H "Content-Type: application/json"
+   #+end_src
+
+   While the task is running, you'll receive:
+   #+begin_src json
+   {"taskId":"123e4567-e89b-12d3-a456-426614174000","status":{"status":"pending"}}
+   #+end_src
+
+   After completion, you'll receive:
+   #+begin_src json
+   {
+     "taskId":"123e4567-e89b-12d3-a456-426614174000",
+     "status":{
+       "status":"completed",
+       "result":{
+         "processedAt":"2023-07-10T12:34:56.789Z",
+         "duration":"10 seconds",
+         "message":"Long-running task completed successfully"
+       }
+     }
+   }
+   #+end_src
+
+* Advantages
+:PROPERTIES:
+:CUSTOM_ID: advantages
+:END:
+
+- Main thread remains responsive during heavy computations
+- Clients get immediate response with task tracking capability
+- Worker threads isolate computational work
+- Easy to scale by adding more workers or implementing a queue
