@@ -40,6 +40,20 @@ This project demonstrates how to handle long-running tasks in NestJS without blo
    bun install
    #+end_src
 
+** Running the Application
+:PROPERTIES:
+:CUSTOM_ID: running-the-application
+:END:
+
+1. Start the NestJS application:
+   #+begin_src sh
+   bun run start
+   # or directly with
+   bun run src/main.ts
+   #+end_src
+
+2. The server will be running at http://localhost:3000
+
 ** Project Structure
 :PROPERTIES:
 :CUSTOM_ID: project-structure
@@ -67,48 +81,135 @@ This project demonstrates how to handle long-running tasks in NestJS without blo
 :CUSTOM_ID: testing-the-code
 :END:
 
-1. Start the NestJS application:
-   #+begin_src sh
-   bun run src/main.ts
-   #+end_src
+** Starting a Long-Running Task
+:PROPERTIES:
+:CUSTOM_ID: starting-a-task
+:END:
 
-2. Start a long-running task with cURL:
+Use the POST endpoint to start a new task:
+
+#+begin_src sh
+curl -X POST http://localhost:3000/long-process/start \
+  -H "Content-Type: application/json" \
+  -d '{"duration": 10}'
+#+end_src
+
+This will return a task ID like:
+#+begin_src json
+{"taskId":"123e4567-e89b-12d3-a456-426614174000","message":"Task started"}
+#+end_src
+
+** Checking Task Status
+:PROPERTIES:
+:CUSTOM_ID: checking-status
+:END:
+
+Use the GET endpoint with your task ID to check the status:
+
+#+begin_src sh
+curl -X GET http://localhost:3000/long-process/status/123e4567-e89b-12d3-a456-426614174000
+#+end_src
+
+While the task is running, you'll receive:
+#+begin_src json
+{"taskId":"123e4567-e89b-12d3-a456-426614174000","status":{"status":"pending"}}
+#+end_src
+
+After completion, you'll receive:
+#+begin_src json
+{
+  "taskId":"123e4567-e89b-12d3-a456-426614174000",
+  "status":{
+    "status":"completed",
+    "result":{
+      "processedAt":"2023-07-10T12:34:56.789Z",
+      "duration":"10 seconds",
+      "message":"Long-running task completed successfully"
+    }
+  }
+}
+#+end_src
+
+** Example Workflow
+:PROPERTIES:
+:CUSTOM_ID: example-workflow
+:END:
+
+1. Start a task with a 30-second duration:
    #+begin_src sh
    curl -X POST http://localhost:3000/long-process/start \
      -H "Content-Type: application/json" \
-     -d '{"duration": 10}'
+     -d '{"duration": 30}'
    #+end_src
 
-   This will return a task ID like:
+2. Save the returned taskId:
    #+begin_src json
-   {"taskId":"123e4567-e89b-12d3-a456-426614174000","message":"Task started"}
+   {"taskId":"8c654137-73b5-48fb-aebc-bc9a5e18ed2f","message":"Task started"}
    #+end_src
 
-3. Check the status of your task (replace with your actual taskId):
+3. Check status after 10 seconds:
    #+begin_src sh
-   curl -X GET http://localhost:3000/long-process/status/123e4567-e89b-12d3-a456-426614174000 \
-     -H "Content-Type: application/json"
+   curl -X GET http://localhost:3000/long-process/status/8c654137-73b5-48fb-aebc-bc9a5e18ed2f
    #+end_src
-
-   While the task is running, you'll receive:
+   
+   Response:
    #+begin_src json
-   {"taskId":"123e4567-e89b-12d3-a456-426614174000","status":{"status":"pending"}}
+   {"taskId":"8c654137-73b5-48fb-aebc-bc9a5e18ed2f","status":{"status":"pending"}}
    #+end_src
 
-   After completion, you'll receive:
+4. Check again after 30+ seconds:
+   #+begin_src sh
+   curl -X GET http://localhost:3000/long-process/status/8c654137-73b5-48fb-aebc-bc9a5e18ed2f
+   #+end_src
+   
+   Response (task completed):
    #+begin_src json
    {
-     "taskId":"123e4567-e89b-12d3-a456-426614174000",
+     "taskId":"8c654137-73b5-48fb-aebc-bc9a5e18ed2f",
      "status":{
        "status":"completed",
        "result":{
-         "processedAt":"2023-07-10T12:34:56.789Z",
-         "duration":"10 seconds",
+         "processedAt":"2023-07-10T12:45:30.123Z",
+         "duration":"30 seconds",
          "message":"Long-running task completed successfully"
        }
      }
    }
    #+end_src
+
+* Troubleshooting
+:PROPERTIES:
+:CUSTOM_ID: troubleshooting
+:END:
+
+** Common Issues
+
+- *Task Not Found Error*: Ensure you're using the correct task ID in the status endpoint.
+- *Worker Errors*: Check server logs for details about worker thread failures.
+- *Compilation Errors*: Make sure TypeScript is properly transpiling worker files to JavaScript.
+
+** Debugging Tips
+
+- Worker files must be compiled to JavaScript before use. The path in =long-process.service.ts= should point to the JS file:
+  #+begin_src typescript
+  const worker = new Worker(join(__dirname, "workers", "long-process.worker.js"), {...});
+  #+end_src
+
+- If you modify worker files, make sure to rebuild the project:
+  #+begin_src sh
+  bun run build
+  #+end_src
+
+* Best Practices
+:PROPERTIES:
+:CUSTOM_ID: best-practices
+:END:
+
+- Set reasonable timeouts for your worker threads
+- Implement proper error handling in both the main thread and workers
+- Consider adding a cleanup mechanism for completed tasks to prevent memory leaks
+- For production, implement a more robust task queue system like Bull/BullMQ
+- Add rate limiting to prevent resource exhaustion from too many concurrent tasks
 
 * Advantages
 :PROPERTIES:

@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body } from "@nestjs/common";
+import { Controller, Post, Get, Body, Param } from "@nestjs/common";
 import { LongProcessService } from "./long-process.service";
 
 @Controller("long-process")
@@ -14,8 +14,8 @@ export class LongProcessController {
   }
 
   @Get("status/:id")
-  async getTaskStatus(@Body() body: { taskId: string }) {
-    const status = await this.longProcessService.checkTaskStatus(body.taskId);
-    return { taskId: body.taskId, status };
+  async getTaskStatus(@Param('id') taskId: string) {
+    const status = await this.longProcessService.checkTaskStatus(taskId);
+    return { taskId, status };
   }
 }
