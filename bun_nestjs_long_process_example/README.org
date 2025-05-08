@@ -65,6 +65,120 @@ This project demonstrates how to handle long-running tasks in NestJS without blo
 - =src/long-process.service.ts= - Service to manage long-running tasks
 - =src/workers/long-process.worker.ts= - Worker thread implementation for CPU-intensive tasks
 
+** Implementation Details
+:PROPERTIES:
+:CUSTOM_ID: implementation-details
+:END:
+
+*** Communication Flow
+:PROPERTIES:
+:CUSTOM_ID: communication-flow
+:END:
+
+The application follows this communication pattern:
+
+#+begin_src
+┌──────────┐      ┌──────────────────┐      ┌───────────────────┐      ┌─────────────────┐
+│          │      │                  │      │                   │      │                 │
+│  Client  │ HTTP │    Controller    │ Call │      Service      │ Fork │  Worker Thread  │
+│          │─────>│                  │─────>│                   │─────>│                 │
+└──────────┘      └──────────────────┘      └───────────────────┘      └─────────────────┘
+     │                     │                        │                          │
+     │                     │                        │                          │
+     │                     │                        │       (Processing)       │
+     │                     │                        │                          │
+     │                     │                        │      postMessage()       │
+     │                     │                        │<─────────────────────────┘
+     │   HTTP Response     │      Return Status     │
+     │<────────────────────│<───────────────────────┘
+     │                     │                        
+     │   Poll Status       │                        
+     │─────────────────────>                        
+     │                     │                        
+     │                     │─────┐                  
+     │                     │     │ Check Status     
+     │                     │<────┘                  
+     │                     │                        
+     │   Status Response   │                        
+     │<────────────────────│                        
+#+end_src
+
+*** Implementation Steps
+:PROPERTIES:
+:CUSTOM_ID: implementation-steps
+:END:
+
+Here's how the components work together:
+
+1. *Controller Layer (API Endpoints)*
+   - Exposes REST endpoints for clients to start tasks and check status
+   - Maps HTTP requests to service methods
+   - Example:
+     #+begin_src typescript
+     @Post("start")
+     async startLongProcess(@Body() body: { duration: number }) {
+       const taskId = await this.longProcessService.startLongRunningTask(body.duration);
+       return { taskId, message: "Task started" };
+     }
+     #+end_src
+
+2. *Service Layer (Task Management)*
+   - Maintains an in-memory map of tasks and their statuses
+   - Creates and manages worker threads
+   - Sets up communication channels with workers
+   - Example:
+     #+begin_src typescript
+     async startLongRunningTask(duration: number): Promise<string> {
+       const taskId = uuidv4();
+       this.tasks.set(taskId, { status: "pending" });
+       
+       const worker = new Worker(join(__dirname, "workers", "long-process.worker.js"), {
+         workerData: { duration },
+       });
+       
+       worker.on("message", (result) => {
+         this.tasks.set(taskId, { status: "completed", result });
+       });
+       
+       return taskId;
+     }
+     #+end_src
+
+3. *Worker Thread (Heavy Computation)*
+   - Runs in a separate thread to avoid blocking Node.js event loop
+   - Receives parameters via workerData
+   - Returns results via parentPort.postMessage()
+   - Example:
+     #+begin_src typescript
+     import { parentPort, workerData } from "worker_threads";
+     
+     const { duration } = workerData;
+     
+     // Simulate heavy work
+     function heavyComputation(duration: number) {
+       const startTime = Date.now();
+       while (Date.now() - startTime < duration * 1000) {
+         // CPU-intensive work
+       }
+       return { processedAt: new Date().toISOString(), duration: `${duration} seconds` };
+     }
+     
+     const result = heavyComputation(duration);
+     
+     // Send result back to main thread
+     if (parentPort) {
+       parentPort.postMessage(result);
+     }
+     #+end_src
+
+4. *Client Interaction*
+   - Clients start processes via POST request
+   - Receive task ID immediately
+   - Poll status endpoint to check completion
+   - Retrieve results when task is complete
+
+This architecture allows handling CPU-intensive tasks without compromising API responsiveness.
+
 ** How It Works
 :PROPERTIES:
 :CUSTOM_ID: how-it-works
