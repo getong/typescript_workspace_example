@@ -60,3 +60,56 @@ export default tseslint.config({
   },
 })
 #+end_src
+
+** Project Features
+:PROPERTIES:
+:CUSTOM_ID: project-features
+:END:
+
+*** Counter Component Demo
+:PROPERTIES:
+:CUSTOM_ID: counter-component-demo
+:END:
+
+This project includes a demonstration of a custom React hook and component:
+
+- =useCounter= - A custom React hook that provides counter functionality
+  - Located in =src/hooks/useCounter.ts=
+  - Provides =count=, =increment=, =decrement=, and =reset= functions
+  - Accepts an optional =initialValue= parameter (defaults to 0)
+
+- =CounterComponent= - A React component that uses the =useCounter= hook
+  - Located in =src/components/CounterComponent.tsx=
+  - Displays the current count and buttons for actions
+  - Uses the =useCounter= hook with an initial value of 5
+
+- =CounterPage= - A page that displays the Counter demonstration
+  - Located in =src/pages/CounterPage.tsx= 
+  - Accessible from the main application via the "Go to Counter Page" button
+
+*** Running the Project
+:PROPERTIES:
+:CUSTOM_ID: running-the-project
+:END:
+
+To run the project locally:
+
+#+begin_src bash
+# Install dependencies
+bun install
+
+# Start development server
+bun run dev
+#+end_src
+
+Navigate to the displayed URL (typically http://localhost:5173) in your browser.
+
+*** Project Structure
+:PROPERTIES:
+:CUSTOM_ID: project-structure
+:END:
+
+- =src/hooks/= - Custom React hooks
+- =src/components/= - Reusable React components
+- =src/pages/= - Page-level components
+- =src/assets/= - Static assets like images and SVGs
