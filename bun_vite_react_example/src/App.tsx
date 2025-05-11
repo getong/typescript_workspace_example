@@ -2,9 +2,15 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import CounterPage from "./pages/CounterPage";
 
 function App() {
   const [count, setCount] = useState(0);
+  const [showCounter, setShowCounter] = useState(false);
+
+  if (showCounter) {
+    return <CounterPage />;
+  }
 
   return (
     <>
@@ -24,6 +30,7 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
+        <button onClick={() => setShowCounter(true)}>Go to Counter Page</button>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
