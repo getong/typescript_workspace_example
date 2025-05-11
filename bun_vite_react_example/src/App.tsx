@@ -3,13 +3,20 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import CounterPage from "./pages/CounterPage";
+import UsersPage from "./pages/UsersPage";
 
 function App() {
   const [count, setCount] = useState(0);
-  const [showCounter, setShowCounter] = useState(false);
+  const [currentPage, setCurrentPage] = useState<"home" | "counter" | "users">(
+    "home",
+  );
 
-  if (showCounter) {
+  if (currentPage === "counter") {
     return <CounterPage />;
+  }
+
+  if (currentPage === "users") {
+    return <UsersPage />;
   }
 
   return (
@@ -30,7 +37,14 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
-        <button onClick={() => setShowCounter(true)}>Go to Counter Page</button>
+        <div className="page-navigation">
+          <button onClick={() => setCurrentPage("counter")}>
+            Go to Counter Page
+          </button>
+          <button onClick={() => setCurrentPage("users")}>
+            Go to Users Page
+          </button>
+        </div>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more

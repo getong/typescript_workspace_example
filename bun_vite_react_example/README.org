@@ -66,26 +66,78 @@ export default tseslint.config({
 :CUSTOM_ID: project-features
 :END:
 
-*** Counter Component Demo
+*** Custom React Hooks
 :PROPERTIES:
-:CUSTOM_ID: counter-component-demo
+:CUSTOM_ID: custom-react-hooks
 :END:
 
-This project includes a demonstration of a custom React hook and component:
+**** useCounter Hook
+:PROPERTIES:
+:CUSTOM_ID: usecounter-hook
+:END:
 
-- =useCounter= - A custom React hook that provides counter functionality
-  - Located in =src/hooks/useCounter.ts=
-  - Provides =count=, =increment=, =decrement=, and =reset= functions
-  - Accepts an optional =initialValue= parameter (defaults to 0)
+A custom React hook that provides counter functionality:
 
-- =CounterComponent= - A React component that uses the =useCounter= hook
-  - Located in =src/components/CounterComponent.tsx=
-  - Displays the current count and buttons for actions
-  - Uses the =useCounter= hook with an initial value of 5
+- Located in =src/hooks/useCounter.ts=
+- Provides =count=, =increment=, =decrement=, and =reset= functions
+- Accepts an optional =initialValue= parameter (defaults to 0)
 
-- =CounterPage= - A page that displays the Counter demonstration
-  - Located in =src/pages/CounterPage.tsx= 
-  - Accessible from the main application via the "Go to Counter Page" button
+**** useFetch Hook
+:PROPERTIES:
+:CUSTOM_ID: usefetch-hook
+:END:
+
+A custom React hook for fetching data from APIs:
+
+- Located in =src/hooks/useFetch.ts=
+- Manages loading state, errors, and successful data fetches
+- Includes proper cleanup with AbortController
+- Returns =data=, =loading=, and =error= states
+
+Example usage:
+
+#+begin_src tsx
+import useFetch from '../hooks/useFetch';
+
+function UsersList() {
+  const { data, loading, error } = useFetch('https://jsonplaceholder.typicode.com/users');
+  
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+  
+  return (
+    <ul>
+      {data.map(user => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+}
+#+end_src
+
+*** Components
+:PROPERTIES:
+:CUSTOM_ID: components
+:END:
+
+**** CounterComponent
+:PROPERTIES:
+:CUSTOM_ID: countercomponent
+:END:
+
+A React component that uses the =useCounter= hook:
+- Located in =src/components/CounterComponent.tsx=
+- Displays the current count and buttons for actions
+- Uses the =useCounter= hook with an initial value of 5
+
+**** CounterPage
+:PROPERTIES:
+:CUSTOM_ID: counterpage
+:END:
+
+A page that displays the Counter demonstration:
+- Located in =src/pages/CounterPage.tsx= 
+- Accessible from the main application via the "Go to Counter Page" button
 
 *** Running the Project
 :PROPERTIES:

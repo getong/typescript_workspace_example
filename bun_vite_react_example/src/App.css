@@ -56,3 +56,31 @@
 .back-link {
   margin-top: 2rem;
 }
+
+/* Users page styles */
+.users-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.users-page ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+}
+
+.users-page li {
+  padding: 0.5rem;
+  border-bottom: 1px solid #444;
+}
+
+.page-navigation {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
