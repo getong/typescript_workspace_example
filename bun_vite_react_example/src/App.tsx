@@ -4,20 +4,36 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import CounterPage from "./pages/CounterPage";
 import UsersPage from "./pages/UsersPage";
+import ResponsivePage from "./pages/ResponsivePage";
+import ContactPage from "./pages/ContactPage";
+import ValidatedFormPage from "./pages/ValidatedFormPage";
+import PostsPage from "./pages/PostsPage";
+import AxiosPostsPage from "./pages/AxiosPostsPage";
+import ApiPostsPage from "./pages/ApiPostsPage";
 
 function App() {
   const [count, setCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState<"home" | "counter" | "users">(
-    "home",
-  );
+  const [currentPage, setCurrentPage] = useState<
+    | "home"
+    | "counter"
+    | "users"
+    | "responsive"
+    | "contact"
+    | "validated-form"
+    | "posts"
+    | "axios-posts"
+    | "api-posts"
+  >("home");
 
-  if (currentPage === "counter") {
-    return <CounterPage />;
-  }
-
-  if (currentPage === "users") {
-    return <UsersPage />;
-  }
+  // Page routing
+  if (currentPage === "counter") return <CounterPage />;
+  if (currentPage === "users") return <UsersPage />;
+  if (currentPage === "responsive") return <ResponsivePage />;
+  if (currentPage === "contact") return <ContactPage />;
+  if (currentPage === "validated-form") return <ValidatedFormPage />;
+  if (currentPage === "posts") return <PostsPage />;
+  if (currentPage === "axios-posts") return <AxiosPostsPage />;
+  if (currentPage === "api-posts") return <ApiPostsPage />;
 
   return (
     <>
@@ -43,6 +59,24 @@ function App() {
           </button>
           <button onClick={() => setCurrentPage("users")}>
             Go to Users Page
+          </button>
+          <button onClick={() => setCurrentPage("responsive")}>
+            Go to Responsive Page
+          </button>
+          <button onClick={() => setCurrentPage("contact")}>
+            Go to Contact Page
+          </button>
+          <button onClick={() => setCurrentPage("validated-form")}>
+            Go to Validated Form
+          </button>
+          <button onClick={() => setCurrentPage("posts")}>
+            Go to Posts Page
+          </button>
+          <button onClick={() => setCurrentPage("axios-posts")}>
+            Go to Axios Posts Page
+          </button>
+          <button onClick={() => setCurrentPage("api-posts")}>
+            Go to API Posts
           </button>
         </div>
       </div>
