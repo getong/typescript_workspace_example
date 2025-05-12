@@ -1,15 +1,8 @@
 import React from "react";
 import ErrorBoundary from "../components/ErrorBoundary";
 import BuggyCounter from "../components/BuggyCounter";
-
-// Custom fallback UI
-const ErrorFallback = ({ error }: { error?: Error }) => (
-  <div className="error-fallback">
-    <h3>Something went wrong! 🔥</h3>
-    <p>The error was: {error?.message || "Unknown error"}</p>
-    <p>Try refreshing the page to reset the demo</p>
-  </div>
-);
+import FallbackUI from "../components/FallbackUI";
+import ErrorBoundaryDemo from "../components/ErrorBoundaryDemo";
 
 function ErrorBoundaryPage() {
   return (
@@ -29,13 +22,23 @@ function ErrorBoundaryPage() {
         </div>
 
         <div className="example-box">
-          <h2>Example 2: Custom Fallback UI</h2>
-          <ErrorBoundary
-            fallback={<ErrorFallback error={new Error("Counter crashed!")} />}
-          >
-            <BuggyCounter />
-          </ErrorBoundary>
+          <h2>Example 2: With Custom FallbackUI</h2>
+          <ErrorBoundaryDemo />
         </div>
+      </div>
+
+      <div className="example-code">
+        <h3>Example Code:</h3>
+        <pre>
+          {`// Using the FallbackUI component
+function App() {
+  return (
+    <ErrorBoundary fallback={<FallbackUI />}>
+      <MyComponent />
+    </ErrorBoundary>
+  );
+}`}
+        </pre>
       </div>
 
       <div className="notes">
