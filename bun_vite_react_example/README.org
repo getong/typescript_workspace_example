@@ -253,6 +253,34 @@ function MyComponent() {
 }
 #+end_src
 
+**** Children as Function Pattern
+:PROPERTIES:
+:CUSTOM_ID: children-as-function-pattern
+:END:
+
+The application also demonstrates the "Children as Function" pattern (a variation of render props):
+
+- Located in =src/components/ChildrenMouseTracker.tsx=
+- Similar to render props but uses the children prop as a function
+- Often considered more elegant than the standard render prop pattern
+- Provides the same capabilities with a cleaner JSX syntax
+
+Example usage:
+
+#+begin_src tsx
+import ChildrenMouseTracker from '../components/ChildrenMouseTracker';
+
+function MyComponent() {
+  return (
+    <ChildrenMouseTracker>
+      {({ x, y }) => (
+        <div>Mouse position: {x}, {y}</div>
+      )}
+    </ChildrenMouseTracker>
+  );
+}
+#+end_src
+
 *** Running the Project
 :PROPERTIES:
 :CUSTOM_ID: running-the-project
