@@ -1,0 +1,66 @@
+* React + TypeScript + Vite
+:PROPERTIES:
+:CUSTOM_ID: react-typescript-vite
+:END:
+This template provides a minimal setup to get React working in Vite with
+HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [[https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react][[cite/t:@vitejs/plugin-react]]]
+  uses [[https://babeljs.io/][Babel]] for Fast Refresh
+- [[https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc][[cite/t:@vitejs/plugin-react-swc]]]
+  uses [[https://swc.rs/][SWC]] for Fast Refresh
+
+** Expanding the ESLint configuration
+:PROPERTIES:
+:CUSTOM_ID: expanding-the-eslint-configuration
+:END:
+If you are developing a production application, we recommend updating
+the configuration to enable type-aware lint rules:
+
+#+begin_src js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+#+end_src
+
+You can also install
+[[https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x][eslint-plugin-react-x]]
+and
+[[https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom][eslint-plugin-react-dom]]
+for React-specific lint rules:
+
+#+begin_src js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default tseslint.config({
+  plugins: {
+    // Add the react-x and react-dom plugins
+    'react-x': reactX,
+    'react-dom': reactDom,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended typescript rules
+    ...reactX.configs['recommended-typescript'].rules,
+    ...reactDom.configs.recommended.rules,
+  },
+})
+#+end_src
