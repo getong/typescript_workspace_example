@@ -3,8 +3,14 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./router.tsx";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+// Avoid non-null assertion by using optional chaining with a fallback
+const rootElement = document.getElementById("root");
+if (rootElement) {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
+} else {
+  console.error("Root element not found");
+}
