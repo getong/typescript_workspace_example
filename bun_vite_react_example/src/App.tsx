@@ -10,6 +10,14 @@ import ValidatedFormPage from "./pages/ValidatedFormPage";
 import PostsPage from "./pages/PostsPage";
 import AxiosPostsPage from "./pages/AxiosPostsPage";
 import ApiPostsPage from "./pages/ApiPostsPage";
+import ThemeContext from "./context/ThemeContext";
+
+// Import the page without HOC and apply HOC here
+import ThemePage from "./pages/ProtectedThemePage";
+import withAuthProtection from "./hoc/withAuthProtection";
+
+// Create the protected component
+const ProtectedThemePage = withAuthProtection(ThemePage);
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,6 +31,7 @@ function App() {
     | "posts"
     | "axios-posts"
     | "api-posts"
+    | "protected-theme"
   >("home");
 
   // Page routing
@@ -34,9 +43,10 @@ function App() {
   if (currentPage === "posts") return <PostsPage />;
   if (currentPage === "axios-posts") return <AxiosPostsPage />;
   if (currentPage === "api-posts") return <ApiPostsPage />;
+  if (currentPage === "protected-theme") return <ProtectedThemePage />;
 
   return (
-    <>
+    <ThemeContext.Provider value="light">
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -78,12 +88,15 @@ function App() {
           <button onClick={() => setCurrentPage("api-posts")}>
             Go to API Posts
           </button>
+          <button onClick={() => setCurrentPage("protected-theme")}>
+            Go to Protected Theme Page
+          </button>
         </div>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-    </>
+    </ThemeContext.Provider>
   );
 }
 

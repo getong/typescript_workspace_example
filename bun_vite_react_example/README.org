@@ -115,6 +115,75 @@ function UsersList() {
 }
 #+end_src
 
+**** useWindowWidth Hook
+:PROPERTIES:
+:CUSTOM_ID: usewindowwidth-hook
+:END:
+
+A custom React hook that tracks the browser window width:
+
+- Located in =src/hooks/useWindowWidth.ts=
+- Returns the current window width
+- Automatically updates when window is resized
+- Cleans up event listeners on component unmount
+
+*** React Context
+:PROPERTIES:
+:CUSTOM_ID: react-context
+:END:
+
+**** ThemeContext
+:PROPERTIES:
+:CUSTOM_ID: themecontext
+:END:
+
+A React context for theme management:
+
+- Located in =src/context/ThemeContext.ts=
+- Provides theme information to components without prop drilling
+- Default value is 'light'
+
+Example usage:
+
+#+begin_src tsx
+import { useContext } from 'react';
+import ThemeContext from '../context/ThemeContext';
+
+function ThemedComponent() {
+  const theme = useContext(ThemeContext);
+  return <div className={`themed-component ${theme}`}>Current theme: {theme}</div>;
+}
+#+end_src
+
+*** Higher-Order Components
+:PROPERTIES:
+:CUSTOM_ID: higher-order-components
+:END:
+
+**** withAuthProtection HOC
+:PROPERTIES:
+:CUSTOM_ID: withauthorprotection-hoc
+:END:
+
+A Higher-Order Component for protecting routes that require authentication:
+
+- Located in =src/hoc/withAuthProtection.tsx=
+- Checks for an auth token in localStorage
+- Shows a login prompt if user is not authenticated
+- Renders the wrapped component if user is authenticated
+
+Example usage:
+
+#+begin_src tsx
+import withAuthProtection from '../hoc/withAuthProtection';
+
+function SecurePage() {
+  return <div>This is a secure page that only authenticated users can see.</div>;
+}
+
+export default withAuthProtection(SecurePage);
+#+end_src
+
 *** Components
 :PROPERTIES:
 :CUSTOM_ID: components
@@ -138,6 +207,18 @@ A React component that uses the =useCounter= hook:
 A page that displays the Counter demonstration:
 - Located in =src/pages/CounterPage.tsx= 
 - Accessible from the main application via the "Go to Counter Page" button
+
+**** ProtectedThemePage
+:PROPERTIES:
+:CUSTOM_ID: protectedthemepage
+:END:
+
+A page that demonstrates both authentication and theme context:
+- Located in =src/pages/ProtectedThemePage.tsx=
+- Protected by the withAuthProtection HOC
+- Uses ThemeContext to demonstrate theming
+- Includes theme switching functionality
+- Shows authentication status and login/logout controls
 
 *** Running the Project
 :PROPERTIES:
@@ -165,3 +246,6 @@ Navigate to the displayed URL (typically http://localhost:5173) in your browser.
 - =src/components/= - Reusable React components
 - =src/pages/= - Page-level components
 - =src/assets/= - Static assets like images and SVGs
+- =src/context/= - React context definitions
+- =src/hoc/= - Higher-Order Components
+- =src/api/= - API service functions

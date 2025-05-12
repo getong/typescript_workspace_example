@@ -211,3 +211,40 @@
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.05);
 }
+
+/* Theme Page styles */
+.theme-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.theme-controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.auth-status {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px dashed #646cff;
+  border-radius: 8px;
+}
+
+.auth-required {
+  text-align: center;
+  padding: 2rem;
+  max-width: 400px;
+  margin: 0 auto;
+  border: 2px solid #ff6464;
+  border-radius: 8px;
+  background-color: rgba(255, 100, 100, 0.1);
+}
+
+.auth-required button {
+  margin-top: 1rem;
+}
