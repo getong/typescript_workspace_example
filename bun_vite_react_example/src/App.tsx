@@ -13,6 +13,7 @@ import ApiPostsPage from "./pages/ApiPostsPage";
 import ThemeContext from "./context/ThemeContext";
 import MouseTrackerPage from "./pages/MouseTrackerPage";
 import MouseTrackerChildrenPage from "./pages/MouseTrackerChildrenPage";
+import MouseHookPage from "./pages/MouseHookPage";
 
 // Import the page without HOC and apply HOC here
 import ThemePage from "./pages/ProtectedThemePage";
@@ -36,6 +37,7 @@ function App() {
     | "protected-theme"
     | "mouse-tracker"
     | "mouse-tracker-children"
+    | "mouse-hook"
   >("home");
 
   // Page routing
@@ -51,6 +53,7 @@ function App() {
   if (currentPage === "mouse-tracker") return <MouseTrackerPage />;
   if (currentPage === "mouse-tracker-children")
     return <MouseTrackerChildrenPage />;
+  if (currentPage === "mouse-hook") return <MouseHookPage />;
 
   return (
     <ThemeContext.Provider value="light">
@@ -103,6 +106,9 @@ function App() {
           </button>
           <button onClick={() => setCurrentPage("mouse-tracker-children")}>
             Go to Mouse Tracker (Children Prop)
+          </button>
+          <button onClick={() => setCurrentPage("mouse-hook")}>
+            Go to Mouse Tracker (Hook)
           </button>
         </div>
       </div>

@@ -127,6 +127,32 @@ A custom React hook that tracks the browser window width:
 - Automatically updates when window is resized
 - Cleans up event listeners on component unmount
 
+**** useMousePosition Hook
+:PROPERTIES:
+:CUSTOM_ID: usemouseposition-hook
+:END:
+
+A custom React hook for tracking mouse position:
+
+- Located in =src/hooks/useMousePosition.ts=
+- Returns the current mouse position coordinates (x, y)
+- Automatically updates when mouse moves
+- Cleans up event listeners on component unmount
+
+Example usage:
+
+#+begin_src tsx
+import useMousePosition from '../hooks/useMousePosition';
+
+function MyComponent() {
+  const { x, y } = useMousePosition();
+  
+  return (
+    <div>Current mouse position: {x}, {y}</div>
+  );
+}
+#+end_src
+
 *** React Context
 :PROPERTIES:
 :CUSTOM_ID: react-context
@@ -280,6 +306,22 @@ function MyComponent() {
   );
 }
 #+end_src
+
+**** Comparison: Class Components vs Hooks
+:PROPERTIES:
+:CUSTOM_ID: comparison-class-components-vs-hooks
+:END:
+
+The application demonstrates three different approaches to the same problem (mouse tracking):
+
+1. *Render Props Pattern* (=MouseTracker.tsx=) - Class component with render prop
+2. *Children as Function Pattern* (=ChildrenMouseTracker.tsx=) - Class component with children as function
+3. *Custom Hook Pattern* (=useMousePosition.ts=) - Functional approach with hooks
+
+Each approach has its own advantages:
+- Render props and children as function are more traditional patterns
+- Custom hooks offer a more concise and reusable solution
+- Hooks approach avoids the need for nested component hierarchies
 
 *** Running the Project
 :PROPERTIES:
