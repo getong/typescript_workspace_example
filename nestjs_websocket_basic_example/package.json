@@ -1,0 +1,32 @@
+{
+  "name": "nestjs_websocket_basic_example",
+  "module": "src/main.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/main.ts",
+    "dev": "bun run --watch src/main.ts",
+    "build": "bun build src/main.ts --outdir dist",
+    "serve": "NODE_ENV=production bun run dist/main.js",
+    "clean": "rm -rf dist",
+    "lint": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.0",
+    "@nestjs/core": "^11.1.0",
+    "@nestjs/platform-express": "^11.1.0",
+    "@nestjs/platform-socket.io": "^11.1.0",
+    "@nestjs/serve-static": "^5.0.3",
+    "@nestjs/websockets": "^11.1.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/express": "^5.0.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

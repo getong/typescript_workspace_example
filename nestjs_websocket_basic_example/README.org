@@ -1,0 +1,53 @@
+* NestJS WebSocket Basic Example
+:PROPERTIES:
+:CUSTOM_ID: nestjs_websocket_basic_example
+:END:
+
+** Installation
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+** Running the application
+To run the server:
+
+#+begin_src sh
+bun run start
+#+end_src
+
+This will start the NestJS application at:
+- HTTP server: http://localhost:3000
+- WebSocket server: ws://localhost:3000
+
+** WebSocket Client Example
+An example HTML client is provided at =public/index.html=. You can open this file directly in your browser to test the WebSocket functionality.
+
+** WebSocket Features
+This example demonstrates the following WebSocket features:
+- Connection handling (connection/disconnection events)
+- Authentication with tokens
+- Sending and receiving messages
+- Room-based chat functionality (join/leave rooms, send messages to rooms)
+
+** WebSocket Client API
+| Action  | Event           | Payload                                                              | Description                        |
+|---------+-----------------+----------------------------------------------------------------------+------------------------------------|
+| Send    | message         | any                                                                  | Send a general message             |
+| Send    | joinRoom        | string                                                               | Join a specific room               |
+| Send    | leaveRoom       | string                                                               | Leave a specific room              |
+| Send    | chatToRoom      | { room: string, message: string }                                    | Send message to a room             |
+| Send    | authenticate    | string                                                               | Authenticate with a token          |
+| Receive | messageResponse | string                                                               | Response to general message        |
+| Receive | joinedRoom      | string                                                               | Confirmation of room join          |
+| Receive | leftRoom        | string                                                               | Confirmation of room leave         |
+| Receive | roomMessage     | { sender: string, room: string, message: string, timestamp: string } | Message from a room                |
+| Receive | userJoined      | { userId: string, room: string }                                     | Notification when user joins room  |
+| Receive | userLeft        | { userId: string, room: string }                                     | Notification when user leaves room |
+| Receive | authenticated   | { success: boolean, user: object }                                   | Authentication result              |
+| Receive | error           | string                                                               | Error message                      |
+|         |                 |                                                                      |                                    |
+
+This project was created using =bun init= in bun v1.1.40.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
