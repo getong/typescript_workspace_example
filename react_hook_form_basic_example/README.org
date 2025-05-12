@@ -1,0 +1,24 @@
+* react_hook_form_basic_example
+:PROPERTIES:
+:CUSTOM_ID: react_hook_form_basic_example
+:END:
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run development server:
+
+#+begin_src sh
+bun run dev
+#+end_src
+
+To build for production:
+
+#+begin_src sh
+bun run build
+#+end_src
+
+This project was created using =bun init= in bun v1.1.42.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
