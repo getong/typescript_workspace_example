@@ -220,6 +220,39 @@ A page that demonstrates both authentication and theme context:
 - Includes theme switching functionality
 - Shows authentication status and login/logout controls
 
+*** React Patterns
+:PROPERTIES:
+:CUSTOM_ID: react-patterns
+:END:
+
+**** Render Props Pattern
+:PROPERTIES:
+:CUSTOM_ID: render-props-pattern
+:END:
+
+The application demonstrates the "Render Props" pattern with the MouseTracker component:
+
+- Located in =src/components/MouseTracker.tsx=
+- Uses class component with state for mouse position tracking
+- Implements the render prop pattern to share mouse position state with any component
+- Allows flexible rendering of mouse tracking information
+
+Example usage:
+
+#+begin_src tsx
+import MouseTracker from '../components/MouseTracker';
+
+function MyComponent() {
+  return (
+    <MouseTracker
+      render={({ x, y }) => (
+        <div>Mouse position: {x}, {y}</div>
+      )}
+    />
+  );
+}
+#+end_src
+
 *** Running the Project
 :PROPERTIES:
 :CUSTOM_ID: running-the-project

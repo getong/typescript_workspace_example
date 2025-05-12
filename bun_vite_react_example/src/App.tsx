@@ -11,6 +11,7 @@ import PostsPage from "./pages/PostsPage";
 import AxiosPostsPage from "./pages/AxiosPostsPage";
 import ApiPostsPage from "./pages/ApiPostsPage";
 import ThemeContext from "./context/ThemeContext";
+import MouseTrackerPage from "./pages/MouseTrackerPage";
 
 // Import the page without HOC and apply HOC here
 import ThemePage from "./pages/ProtectedThemePage";
@@ -32,6 +33,7 @@ function App() {
     | "axios-posts"
     | "api-posts"
     | "protected-theme"
+    | "mouse-tracker"
   >("home");
 
   // Page routing
@@ -44,6 +46,7 @@ function App() {
   if (currentPage === "axios-posts") return <AxiosPostsPage />;
   if (currentPage === "api-posts") return <ApiPostsPage />;
   if (currentPage === "protected-theme") return <ProtectedThemePage />;
+  if (currentPage === "mouse-tracker") return <MouseTrackerPage />;
 
   return (
     <ThemeContext.Provider value="light">
@@ -90,6 +93,9 @@ function App() {
           </button>
           <button onClick={() => setCurrentPage("protected-theme")}>
             Go to Protected Theme Page
+          </button>
+          <button onClick={() => setCurrentPage("mouse-tracker")}>
+            Go to Mouse Tracker
           </button>
         </div>
       </div>

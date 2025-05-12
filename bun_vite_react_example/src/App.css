@@ -248,3 +248,28 @@
 .auth-required button {
   margin-top: 1rem;
 }
+
+/* Mouse Tracker Page styles */
+.mouse-tracker-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tracker-container {
+  width: 100%;
+  height: 300px;
+  border: 2px dashed #646cff;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1rem 0;
+  background-color: rgba(100, 108, 255, 0.05);
+}
+
+.tracker-container h2 {
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  display: inline-block;
+}
