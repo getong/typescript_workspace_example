@@ -14,6 +14,7 @@ import ThemeContext from "./context/ThemeContext";
 import MouseTrackerPage from "./pages/MouseTrackerPage";
 import MouseTrackerChildrenPage from "./pages/MouseTrackerChildrenPage";
 import MouseHookPage from "./pages/MouseHookPage";
+import ErrorBoundaryPage from "./pages/ErrorBoundaryPage";
 
 // Import the page without HOC and apply HOC here
 import ThemePage from "./pages/ProtectedThemePage";
@@ -38,6 +39,7 @@ function App() {
     | "mouse-tracker"
     | "mouse-tracker-children"
     | "mouse-hook"
+    | "error-boundary"
   >("home");
 
   // Page routing
@@ -54,6 +56,7 @@ function App() {
   if (currentPage === "mouse-tracker-children")
     return <MouseTrackerChildrenPage />;
   if (currentPage === "mouse-hook") return <MouseHookPage />;
+  if (currentPage === "error-boundary") return <ErrorBoundaryPage />;
 
   return (
     <ThemeContext.Provider value="light">
@@ -109,6 +112,9 @@ function App() {
           </button>
           <button onClick={() => setCurrentPage("mouse-hook")}>
             Go to Mouse Tracker (Hook)
+          </button>
+          <button onClick={() => setCurrentPage("error-boundary")}>
+            Go to Error Boundary Demo
           </button>
         </div>
       </div>

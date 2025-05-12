@@ -323,6 +323,39 @@ Each approach has its own advantages:
 - Custom hooks offer a more concise and reusable solution
 - Hooks approach avoids the need for nested component hierarchies
 
+*** Error Handling
+:PROPERTIES:
+:CUSTOM_ID: error-handling
+:END:
+
+**** ErrorBoundary Component
+:PROPERTIES:
+:CUSTOM_ID: errorboundary-component
+:END:
+
+A component for catching and handling errors in React component trees:
+
+- Located in =src/components/ErrorBoundary.tsx=
+- Implemented as a class component (required for error boundaries)
+- Catches JavaScript errors in children components
+- Prevents the entire application from crashing
+- Can display fallback UI when errors occur
+
+Example usage:
+
+#+begin_src tsx
+import ErrorBoundary from '../components/ErrorBoundary';
+import MyComponent from '../components/MyComponent';
+
+function SafeComponent() {
+  return (
+    <ErrorBoundary fallback={<p>Something went wrong!</p>}>
+      <MyComponent />
+    </ErrorBoundary>
+  );
+}
+#+end_src
+
 *** Running the Project
 :PROPERTIES:
 :CUSTOM_ID: running-the-project
