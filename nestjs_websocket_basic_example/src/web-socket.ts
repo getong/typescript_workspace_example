@@ -5,27 +5,15 @@ import {
   OnGatewayInit,
   OnGatewayConnection,
   OnGatewayDisconnect,
-  // WsResponse is not exported from @nestjs/websockets in the current version
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
 import { Logger } from "@nestjs/common";
+import { validateToken } from "./utils/token-validator";
 
 // Define the WsResponse interface locally
 interface WsResponse<T> {
   event: string;
   data: T;
-}
-
-// Update the token validation function to accept socket IDs
-function validateToken(token: string): any {
-  // This is just a simple example implementation
-  if (token === "valid-token" || token.includes("-")) { // Accept "valid-token" or socket IDs (which contain hyphens)
-    return { 
-      id: token === "valid-token" ? 1 : token,
-      username: token === "valid-token" ? "testuser" : `user-${token.substring(0, 6)}`
-    };
-  }
-  throw new Error("Invalid token");
 }
 
 @WebSocketGateway({
@@ -114,7 +102,9 @@ export class AppGateway
         user: { id: user.id, username: user.username },
       });
     } catch (e) {
-      this.logger.error(`Authentication failed for client ${client.id}: ${(e as Error).message}`);
+      this.logger.error(
+        `Authentication failed for client ${client.id}: ${(e as Error).message}`,
+      );
       client.emit("error", `Authentication failed: ${(e as Error).message}`);
     }
   }

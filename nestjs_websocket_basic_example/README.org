@@ -49,5 +49,24 @@ This example demonstrates the following WebSocket features:
 | Receive | error           | string                                                               | Error message                      |
 |         |                 |                                                                      |                                    |
 
+** Testing
+This project uses Vitest for testing. Run tests with the following commands:
+
+#+begin_src sh
+# Run tests
+bun run test
+
+# Run tests in watch mode
+bun run test:watch
+
+# Run tests with coverage
+bun run test:coverage
+#+end_src
+
+Tests include:
+- Unit tests for utility functions
+- Integration tests for the WebSocket gateway
+- Controller tests for serving static files
+
 This project was created using =bun init= in bun v1.1.40.
 [[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
