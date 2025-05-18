@@ -1,0 +1,36 @@
+{
+  "name": "deft-project",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "webpack serve --mode development",
+    "build": "webpack --mode development",
+    "build:android": "cross-env DEFT_PLATFORM=android-arm64 webpack --mode development",
+    "build:ohos": "cross-env DEFT_PLATFORM=ohos-arm64 webpack --mode development",
+    "build:ohos-amd64": "cross-env DEFT_PLATFORM=ohos-amd64 webpack --mode development"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.27.1",
+    "cross-env": "^7.0.3",
+    "deft-react": "^0.4.0",
+    "deft-sys": "^0.6.1",
+    "react": "19.1.0",
+    "react-reconciler": "0.32.0"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-react": "^7.27.1",
+    "@types/react": "^19.1.4",
+    "babel-loader": "^10.0.0",
+    "deft-webpack-plugin": "^0.3.9",
+    "css-loader": "^7.1.2",
+    "deft-style-loader": "^1.0.1",
+    "postcss": "^8.5.3",
+    "postcss-loader": "^8.1.1",
+    "webpack": "5.99.8",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "5.2.1"
+  }
+}

@@ -1,0 +1,9 @@
+.main {
+    background: #2a2a2a;
+    color: #FFF;
+    padding: 5px;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}

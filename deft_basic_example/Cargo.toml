@@ -1,0 +1,21 @@
+[package]
+name = "deft-app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+deft = "0.7.0"
+openharmony-ability-derive = { version = "0.0.3" }
+
+[target.'cfg(target_env = "ohos")'.dependencies]
+deft-ohos-logger = { version = "0.1.0" }
+openharmony-ability = { version = "0.0.4" }
+openharmony-ability-derive = { version = "0.0.3" }
+
+[build-dependencies]
+deft-build = { version = "0.2.0" }
+
+[lib]
+name = "deftapp"
+path = "src/main.rs"
+crate-type=["cdylib"]

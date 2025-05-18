@@ -22,6 +22,7 @@
 **/.grunt
 **/bower_components
 **/tsd-debug.log
+**/Cargo.lock
 tests/cases/rwc/*
 tests/cases/perf/*
 !tests/cases/webharness/compilerToString.js
