@@ -24,7 +24,7 @@
     "@babel/preset-react": "^7.27.1",
     "@types/react": "^19.1.4",
     "babel-loader": "^10.0.0",
-    "deft-webpack-plugin": "^0.3.9",
+    "deft-webpack-plugin": "^0.3.11",
     "css-loader": "^7.1.2",
     "deft-style-loader": "^1.0.1",
     "postcss": "^8.5.3",
