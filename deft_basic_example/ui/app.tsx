@@ -1,13 +1,25 @@
-import "./app.css"
-import {Container} from "deft-react";
+import "./app.css";
+import { Container } from "deft-react";
+import React from "react";
+
+class ErrorBoundary extends React.Component {
+  componentDidCatch(error, info) {
+    console.error("error catch", error);
+  }
+  render() {
+    // @ts-ignore
+    return this.props.children;
+  }
+}
+
+function MyApp() {
+  return <Container className="main">Welcome to Your Deft App</Container>;
+}
 
 export function App() {
-    return <Container className="main">
-        <Container style={{fontSize: 20}}>
-            Welcome to Your Deft App
-        </Container>
-        <Container style={{color: '#5FD8F9'}}>
-            Edit ui/app.tsx and save to reload
-        </Container>
-    </Container>
+  return (
+    <ErrorBoundary>
+      <MyApp />
+    </ErrorBoundary>
+  );
 }
