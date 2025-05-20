@@ -1,0 +1,37 @@
+* async_interface_promise_example
+:PROPERTIES:
+:CUSTOM_ID: async_interface_promise_example
+:END:
+This project demonstrates how TypeScript interfaces, async functions, and promises work together.
+
+** Concepts Demonstrated
+- Defining interfaces with async methods that return promises
+- Implementing interfaces with async/await syntax
+- Type-safe promise handling with generics
+- Error handling with async/await and promise chains
+- Promise-based API design patterns
+
+** Running the Example
+To install dependencies:
+
+#+begin_src sh
+bun install
+#+end_src
+
+To run:
+
+#+begin_src sh
+bun run src/main.ts
+#+end_src
+
+** Project Structure
+- ~src/main.ts~ - Contains the main example code demonstrating interfaces with async/await and promises
+
+** Key Takeaways
+- Interfaces can define methods that return Promises
+- Async methods automatically return Promises
+- TypeScript's generic system works well with Promises for type safety
+- Both async/await and promise chaining can be used with interface implementations
+
+This project was created using =bun init= in bun v1.1.40.
+[[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
