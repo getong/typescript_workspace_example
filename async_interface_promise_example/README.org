@@ -10,6 +10,43 @@ This project demonstrates how TypeScript interfaces, async functions, and promis
 - Type-safe promise handling with generics
 - Error handling with async/await and promise chains
 - Promise-based API design patterns
+- Promise composition techniques (Promise.all, Promise.allSettled, Promise.race)
+
+** Promise Composition
+The example includes demonstrations of three major Promise composition patterns:
+
+*** Promise.all
+Executes multiple promises in parallel and waits for all to complete successfully.
+- Returns a single promise that resolves when all input promises resolve
+- Result is an array containing the resolved values of each promise
+- If any promise rejects, the entire Promise.all rejects immediately
+
+#+begin_src typescript
+// Example of Promise.all
+const parallelResults = await Promise.all(arrayOfPromises);
+#+end_src
+
+*** Promise.allSettled
+Similar to Promise.all but waits for all promises to complete regardless of success/failure.
+- Returns a single promise that always resolves once all promises complete
+- Result is an array of objects with status ('fulfilled' or 'rejected') and value/reason
+- Never rejects, making it ideal for handling multiple operations where some may fail
+
+#+begin_src typescript
+// Example of Promise.allSettled
+const mixedResults = await Promise.allSettled(arrayOfPromises);
+#+end_src
+
+*** Promise.race
+Returns the result of the first promise to resolve or reject.
+- Useful for implementing timeouts or selecting the fastest responding resource
+- Result is the value of the first promise to complete
+- Rejects if the first promise to complete rejects
+
+#+begin_src typescript
+// Example of Promise.race
+const fastestResult = await Promise.race(arrayOfPromises);
+#+end_src
 
 ** Running the Example
 To install dependencies:
@@ -32,6 +69,8 @@ bun run src/main.ts
 - Async methods automatically return Promises
 - TypeScript's generic system works well with Promises for type safety
 - Both async/await and promise chaining can be used with interface implementations
+- Promise composition methods (Promise.all, Promise.allSettled, Promise.race) handle multiple promises
+- Type safety can be maintained across complex promise patterns
 
 This project was created using =bun init= in bun v1.1.40.
 [[https://bun.sh][Bun]] is a fast all-in-one JavaScript runtime.
