@@ -2,6 +2,9 @@
  * Example demonstrating TypeScript interfaces with async functions and promises
  */
 
+// Import the promise utilities from the new file
+import * as PromiseUtils from "./promise-utils";
+
 // Define error types for better error handling
 enum ErrorType {
   NETWORK = "NETWORK_ERROR",
@@ -325,6 +328,166 @@ class APIDataService implements DataService {
     // Use Promise.race to get the first promise that resolves
     return Promise.race(pingPromises);
   }
+
+  /**
+   * Example of using promise utilities from the blog post
+   * @param userId User ID to fetch
+   * @returns Promise resolving to user data with blog post utilities
+   */
+  async fetchUserWithUtilities(userId: number): Promise<UserData> {
+    // Create a memoized version of the fetch function
+    const memoizedFetch = PromiseUtils.memoizePromise(
+      async (id: number): Promise<UserData> => {
+        console.log(`   Actually fetching user ${id} (non-cached)`);
+
+        // Simulate network request with potential failures
+        await PromiseUtils.delay(800); // Wait 800ms
+
+        if (Math.random() > 0.8) {
+          throw new ServiceError(
+            ErrorType.NETWORK,
+            `Failed to fetch user with ID ${id}`,
+            500,
+          );
+        }
+
+        return {
+          id,
+          name: `User ${id}`,
+          active: true,
+          score: Math.floor(Math.random() * 100),
+        };
+      },
+      (id) => `user-${id}`, // Cache key generator
+      10000, // 10 second TTL for cache
+    );
+
+    // Retry the fetch with timeout
+    try {
+      return await PromiseUtils.retry(
+        () =>
+          PromiseUtils.withTimeout(
+            memoizedFetch(userId),
+            2000,
+            `Fetching user ${userId} timed out`,
+          ),
+        3, // 3 retries
+        500, // 500ms initial delay between retries with default backoff
+      );
+    } catch (error) {
+      throw new ServiceError(
+        ErrorType.NETWORK,
+        `Failed to fetch user ${userId} after multiple attempts: ${error.message}`,
+        503,
+      );
+    }
+  }
+
+  /**
+   * Batch process multiple user IDs with controlled concurrency
+   * @param userIds Array of user IDs to fetch
+   * @returns Promise resolving to array of user data
+   */
+  async batchProcessUsers(userIds: number[]): Promise<UserData[]> {
+    // Define a function to process a chunk of user IDs
+    const processChunk = async (chunk: number[]): Promise<UserData[]> => {
+      console.log(`   Processing chunk of ${chunk.length} users`);
+
+      const results: UserData[] = [];
+
+      // Create a semaphore to limit concurrent requests within a chunk
+      const semaphoreGet = PromiseUtils.createSemaphore(
+        async (id: number): Promise<UserData> => {
+          await PromiseUtils.delay(300 + Math.random() * 500);
+          return {
+            id,
+            name: `Batch User ${id}`,
+            active: Math.random() > 0.2,
+            score: Math.floor(Math.random() * 100),
+          };
+        },
+        3, // Maximum 3 concurrent requests
+      );
+
+      // Process each ID in the chunk with the semaphore
+      for (const id of chunk) {
+        try {
+          const userData = await semaphoreGet(id);
+          results.push(userData);
+        } catch (error) {
+          console.error(`   Error processing user ${id}:`, error);
+          // Push a placeholder for failed requests
+          results.push({
+            id,
+            name: "Error",
+            active: false,
+            score: 0,
+          });
+        }
+      }
+
+      return results;
+    };
+
+    // Use chunked processing to handle all user IDs
+    return PromiseUtils.chunkedProcess(
+      userIds,
+      processChunk,
+      5, // Process in chunks of 5
+      2, // Process 2 chunks in parallel
+    );
+  }
+
+  /**
+   * Demonstrates a debounced search function
+   */
+  createDebouncedSearch(): (term: string) => Promise<UserData[]> {
+    return PromiseUtils.debouncePromise(
+      async (term: string): Promise<UserData[]> => {
+        console.log(`   Searching for "${term}"...`);
+        await PromiseUtils.delay(600); // Simulate API call
+
+        // Return 0-3 fake results
+        const count = Math.floor(Math.random() * 4);
+        return Array(count)
+          .fill(0)
+          .map((_, i) => ({
+            id: Math.floor(Math.random() * 1000),
+            name: `Result ${i + 1} for "${term}"`,
+            active: true,
+            score: Math.floor(Math.random() * 100),
+          }));
+      },
+      300, // 300ms debounce time
+    );
+  }
+
+  /**
+   * Creates a cancelable operation
+   * @returns Object with promise and cancel function
+   */
+  createLongOperation(): {
+    promise: Promise<string>;
+    cancel: (reason?: string) => void;
+  } {
+    const { promise, cancel } = PromiseUtils.cancelable<string>();
+
+    // Start a long operation in the background
+    (async () => {
+      try {
+        for (let i = 1; i <= 5; i++) {
+          await PromiseUtils.delay(1000);
+          console.log(`   Long operation: step ${i}/5 completed`);
+        }
+        // This won't be called if the operation is canceled
+        console.log("   Long operation completed successfully");
+      } catch (error) {
+        console.log(`   Long operation error: ${error.message}`);
+      }
+    })();
+
+    return { promise, cancel };
+  }
 }
 
 // Strongly typed user data interface
@@ -592,6 +755,95 @@ async function runExample(): Promise<void> {
       } catch (error) {
         // This would only happen if all promises reject before any resolves
         console.error("   All servers failed to respond in time");
+      }
+
+      console.log("\n--- Promise Utility Patterns Demo (from blog) ---");
+
+      console.log("\n1. Memoized, Retried and Timeout-Protected Fetch:");
+      try {
+        // First call will fetch
+        console.log("   First call for user 42:");
+        const user1 = await service.fetchUserWithUtilities(42);
+        console.log(`   Result: User ${user1.id} - ${user1.name}`);
+
+        // Second call should use cache
+        console.log("\n   Second call for the same user (should use cache):");
+        const user2 = await service.fetchUserWithUtilities(42);
+        console.log(`   Result: User ${user2.id} - ${user2.name}`);
+
+        // Different user should fetch again
+        console.log("\n   Call for a different user:");
+        const user3 = await service.fetchUserWithUtilities(99);
+        console.log(`   Result: User ${user3.id} - ${user3.name}`);
+      } catch (error) {
+        console.error(`   Fetch Error: ${error.message}`);
+      }
+
+      console.log("\n2. Chunked Processing with Semaphores:");
+      try {
+        const userIds = Array(15)
+          .fill(0)
+          .map((_, i) => 1000 + i);
+        console.log(
+          `   Processing ${userIds.length} users in controlled batches...`,
+        );
+
+        const startTime = Date.now();
+        const batchResults = await service.batchProcessUsers(userIds);
+        const endTime = Date.now();
+
+        console.log(
+          `   Processed ${batchResults.length} users in ${endTime - startTime}ms`,
+        );
+        console.log(
+          `   First few results: ${JSON.stringify(batchResults.slice(0, 3))}`,
+        );
+      } catch (error) {
+        console.error(`   Batch Processing Error: ${error.message}`);
+      }
+
+      console.log("\n3. Debounced Search:");
+      try {
+        const debouncedSearch = service.createDebouncedSearch();
+
+        // These should be debounced to a single call
+        console.log(
+          "   Making multiple rapid search requests (only last should execute):",
+        );
+        debouncedSearch("test");
+        debouncedSearch("test1");
+        debouncedSearch("test12");
+        const results = await debouncedSearch("test123");
+
+        await PromiseUtils.delay(500); // Wait for search to complete
+        console.log(`   Got ${results.length} results from debounced search`);
+      } catch (error) {
+        console.error(`   Search Error: ${error.message}`);
+      }
+
+      console.log("\n4. Cancelable Operation:");
+      try {
+        const { promise, cancel } = service.createLongOperation();
+
+        console.log("   Started long operation. Will cancel in 2.5 seconds...");
+        setTimeout(() => {
+          console.log("   Canceling operation now.");
+          cancel("User requested cancellation");
+        }, 2500);
+
+        try {
+          await promise;
+          console.log(
+            "   Operation completed successfully (shouldn't see this)",
+          );
+        } catch (error) {
+          console.log(`   Operation was canceled: ${error.message}`);
+        }
+
+        // Let the background task continue for demo purposes
+        await PromiseUtils.delay(3000);
+      } catch (error) {
+        console.error(`   Cancelable Operation Error: ${error.message}`);
       }
     }
   } catch (error) {
