@@ -88,3 +88,4 @@ TEST-results.xml
 **/.vinxi
 **/README.html
 **/error.txt
+**/*.lock
