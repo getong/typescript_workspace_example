@@ -11,7 +11,8 @@ src/
 ├── app.module.ts            # Root module wiring together features
 ├── diagnostics/             # /health readiness + status endpoint
 ├── libp2p/                  # libp2p helpers, service & module
-└── peers/                   # /peers REST API for summaries & dialing
+├── peers/                   # /peers REST API for summaries & dialing
+└── workers/                 # worker_thread logging demo + module wiring
 ```
 
 ## Install dependencies
@@ -29,6 +30,21 @@ bun run start
 This script compiles the TypeScript sources into `dist/` and then launches the
 Nest HTTP server via Node. You can run `bun run build` separately if you only
 need to generate the compiled output.
+
+### Worker thread logging demo
+
+On bootstrap the `WorkersModule` spawns two `worker_threads` (`alpha` and
+`beta`). Each worker uses the shared Winston logger (`src/logger.ts`) via
+`createContextLogger`, so every log line contains the worker name, thread id,
+and PID metadata. Logs are emitted to both the console and `logs/app.log`, so
+you can start the server and watch for entries similar to:
+
+```
+2024-01-01T00:00:00.000Z [pid:12345] info: [Worker:alpha] Worker alpha tick 1
+```
+
+Adjust `GROUPS` in `src/workers/worker-manager.service.ts` to experiment with
+additional worker groups or different logging cadences.
 
 ### Environment loading
 

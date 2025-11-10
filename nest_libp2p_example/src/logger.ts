@@ -1,6 +1,7 @@
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { isMainThread, threadId, workerData } from "node:worker_threads";
 import { mapSourcePosition } from "source-map-support";
 import {
   createLogger,
@@ -199,6 +200,35 @@ function normalizeMeta(meta?: unknown): LogMetadata {
   return { value: meta } satisfies LogMetadata;
 }
 
+function getThreadMetadata(): LogMetadata {
+  const threadLabel = isMainThread ? "main" : `worker-${threadId}`;
+  const metadata: LogMetadata = {
+    pid: process.pid,
+    threadId,
+    worker: threadLabel,
+  } satisfies LogMetadata;
+
+  const workerName = getWorkerName();
+  if (workerName) {
+    metadata.workerName = workerName;
+  }
+
+  return metadata;
+}
+
+function getWorkerName(): string | undefined {
+  if (isMainThread || workerData == null) {
+    return undefined;
+  }
+  if (typeof workerData === "object" && "name" in workerData) {
+    const { name } = workerData as { name?: unknown };
+    if (typeof name === "string" && name.length > 0) {
+      return name;
+    }
+  }
+  return undefined;
+}
+
 function createLevelLogger(
   destination: WinstonLogger,
   level: string,
@@ -207,7 +237,7 @@ function createLevelLogger(
   return (message: string, meta?: unknown) => {
     const callerLocation = getCallerLocation();
     const mergedMeta = {
-      pid: process.pid,
+      ...getThreadMetadata(),
       module: moduleName,
       context: moduleName,
       ...callerLocation,
