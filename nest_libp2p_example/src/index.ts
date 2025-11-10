@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "source-map-support/register.js";
 import "./config/load-env.js";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module.js";
