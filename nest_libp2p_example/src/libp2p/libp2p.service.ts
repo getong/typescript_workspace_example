@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import type { OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { createLibp2p, type Libp2p } from "libp2p";
 import {
@@ -18,10 +18,11 @@ import type {
   Libp2pSummary,
   PeerSummary,
 } from "./libp2p.types.js";
+import { createContextLogger } from "../logger.js";
 
 @Injectable()
 export class Libp2pService implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(Libp2pService.name);
+  private readonly logger = createContextLogger(Libp2pService.name);
   private readonly nodes: Libp2p[] = [];
   private lifecycleStatus: Libp2pLifecycleStatus = "stopped";
   private serverNode?: Libp2p;
@@ -89,7 +90,7 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
     const listenAddress =
       process.env.LIBP2P_LISTEN_MULTIADDR ?? "/ip4/127.0.0.1/tcp/0";
 
-    this.logger.log(`libp2p server listening on ${listenAddress}`);
+    this.logger.info(`libp2p server listening on ${listenAddress}`);
 
     this.serverNode = await createLibp2p({
       ...createLibp2pBaseConfig(),
@@ -100,7 +101,7 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
     this.nodes.push(this.serverNode);
 
     this.serverNode.addEventListener("peer:connect", (evt) => {
-      this.logger.log(`Server connected to peer ${evt.detail.toString()}`);
+      this.logger.info(`Server connected to peer ${evt.detail.toString()}`);
     });
     this.serverNode.addEventListener("peer:disconnect", (evt) => {
       this.logger.warn(
@@ -108,7 +109,7 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
       );
     });
 
-    this.logger.log(
+    this.logger.info(
       `libp2p server node started with peer id ${this.serverNode.peerId.toString()}`,
     );
     this.logListenAddresses(this.serverNode);
@@ -133,7 +134,7 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
     let dialTarget = envDialTarget ?? localDialTarget;
 
     if (envDialTarget != null) {
-      this.logger.log(`Dial target loaded from .env: ${envDialTarget}`);
+      this.logger.info(`Dial target loaded from .env: ${envDialTarget}`);
     }
 
     try {
@@ -154,7 +155,7 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
     this.dialTarget = dialTarget;
     this.nodes.push(this.clientNode);
 
-    this.logger.log(
+    this.logger.info(
       `libp2p client node started with peer id ${this.clientNode.peerId.toString()}`,
     );
 
@@ -187,7 +188,7 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
     const clientNode = await createLibp2p(createLibp2pBaseConfig());
 
     clientNode.addEventListener("peer:connect", (evt) => {
-      this.logger.log(`Client connected to peer ${evt.detail.toString()}`);
+      this.logger.info(`Client connected to peer ${evt.detail.toString()}`);
     });
     clientNode.addEventListener("peer:disconnect", (evt) => {
       this.logger.warn(
@@ -195,7 +196,7 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
       );
     });
 
-    this.logger.log(
+    this.logger.info(
       `libp2p client node ${clientNode.peerId.toString()} dialing ${dialMultiaddr.toString()}`,
     );
 
@@ -241,11 +242,11 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
 
     for (const libp2pNode of this.nodes) {
       if (libp2pNode.status === "started") {
-        this.logger.log(
+        this.logger.info(
           `Stopping libp2p node ${libp2pNode.peerId.toString()}...`,
         );
         await libp2pNode.stop();
-        this.logger.log(`libp2p node ${libp2pNode.peerId.toString()} stopped`);
+        this.logger.info(`libp2p node ${libp2pNode.peerId.toString()} stopped`);
       }
     }
 
@@ -253,9 +254,9 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
   }
 
   private logListenAddresses(node: Libp2p): void {
-    this.logger.log("Listening on:");
+    this.logger.info("Listening on:");
     node.getMultiaddrs().forEach((addr) => {
-      this.logger.log(`  ${addr.toString()}`);
+      this.logger.info(`  ${addr.toString()}`);
     });
   }
 
