@@ -1,3 +1,4 @@
+import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { mapSourcePosition } from "source-map-support";
@@ -56,10 +57,30 @@ const defaultLogLevel =
   process.env.LOG_LEVEL ??
   (process.env.NODE_ENV === "production" ? "info" : "debug");
 
+const configuredLogFile = process.env.LOG_FILE ?? "logs/app.log";
+const logFilePath = path.isAbsolute(configuredLogFile)
+  ? configuredLogFile
+  : path.resolve(process.cwd(), configuredLogFile);
+
+function ensureLogDirectory(filePath: string): void {
+  try {
+    mkdirSync(path.dirname(filePath), { recursive: true });
+  } catch {
+    // ignore directory creation errors; Winston will surface write issues
+  }
+}
+
+ensureLogDirectory(logFilePath);
+
 export const logger = createLogger({
   level: defaultLogLevel,
   format: combine(timestamp(), errors({ stack: true }), splat(), logFormat),
   transports: [
+    new transports.File({
+      filename: logFilePath,
+      handleExceptions: true,
+      format: combine(timestamp(), errors({ stack: true }), splat(), logFormat),
+    }),
     new transports.Console({
       handleExceptions: true,
       format: combine(
