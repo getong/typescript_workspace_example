@@ -76,15 +76,48 @@ Environment variables:
   does not include `/p2p/<peerId>`.
 - `LIBP2P_SHUTDOWN_MS` – optionally auto-stop libp2p nodes after the specified
   number of milliseconds.
+- `REDIS_URL` – optional connection string overriding the host/port/password
+  values below.
+- `REDIS_HOST` / `REDIS_PORT` – Redis host and port to connect to
+  (`127.0.0.1:6379` by default).
+- `REDIS_USERNAME` – ACL username the Redis client should authenticate as
+  (`nestapp` in `.env-example`, matching the Dockerfile below).
+- `REDIS_PASSWORD` / `REDIS_DB` – credentials and db index passed to the Redis
+  client.
+
+### Redis integration
+
+The server caches libp2p peer summaries and health snapshots inside Redis.
+This enables the new `/peers/cached` endpoint and enriches `/health` responses
+with the last cached data even if libp2p is restarting. Point the Redis client
+at your preferred instance via the environment variables above. For quick
+local testing you can build and run the provided Redis image (credentials match
+`.env-example`):
+
+```bash
+docker build -f Dockerfile.redis \
+  -t nest-libp2p-redis \
+  --build-arg REDIS_USERNAME="${REDIS_USERNAME:-nestapp}" \
+  --build-arg REDIS_PASSWORD="${REDIS_PASSWORD:-supersecret}" \
+  .
+
+docker run -it --rm --name nest-redis -p 6379:6379 nest-libp2p-redis
+```
+
+If you need different credentials, pass new `--build-arg` values *and* update
+the corresponding `REDIS_USERNAME` / `REDIS_PASSWORD` variables in your `.env`
+file so the Nest app and Redis container stay in sync.
 
 ## REST endpoints
 
 - `GET /peers` – returns the libp2p lifecycle status, listen addresses, and
   current connections for both the server and the bundled client node.
+- `GET /peers/cached` – returns the latest cached summary stored in Redis plus
+  the timestamp it was recorded.
 - `POST /peers/dial` – body `{ "multiaddr": "...", "peerId": "..." }` to
   instruct the client node to dial an additional peer.
-- `GET /health` – lightweight readiness and diagnostic information suitable
-  for probes or dashboards.
+- `GET /health` – lightweight readiness data enriched with the most recent
+  cached summary and the previously recorded health snapshot from Redis.
 
 The libp2p service keeps the original Bun example behavior (dial target
 resolution, auto-shutdown handling, event logging) while making it accessible

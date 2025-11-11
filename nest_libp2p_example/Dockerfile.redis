@@ -1,0 +1,28 @@
+# syntax=docker/dockerfile:1.7
+
+FROM redis:7.4-alpine
+
+ARG REDIS_USERNAME=nestapp
+ARG REDIS_PASSWORD=supersecret
+ARG REDIS_PORT=6379
+
+ENV REDIS_USERNAME=${REDIS_USERNAME}
+ENV REDIS_PASSWORD=${REDIS_PASSWORD}
+ENV REDIS_PORT=${REDIS_PORT}
+
+RUN set -eux; \
+  mkdir -p /usr/local/etc/redis
+
+RUN set -eux; \
+  cat <<EOF >/usr/local/etc/redis/redis.conf
+port ${REDIS_PORT}
+bind 0.0.0.0
+protected-mode yes
+user default off
+user ${REDIS_USERNAME} on >${REDIS_PASSWORD} ~* &* +@all
+save ""
+EOF
+
+EXPOSE 6379
+
+CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]
