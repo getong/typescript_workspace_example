@@ -1,20 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import type { OnModuleDestroy } from "@nestjs/common";
-import type { RedisOptions } from "ioredis";
-import Redis from "ioredis";
+import { Redis as RedisClient, type RedisOptions } from "ioredis";
 import { createContextLogger } from "../logger.js";
 
 @Injectable()
 export class RedisService implements OnModuleDestroy {
   private readonly logger = createContextLogger(RedisService.name);
-  private readonly client: Redis;
+  private readonly client: RedisClient;
 
   constructor() {
     this.client = this.createClient();
     this.attachLogging();
   }
 
-  get instance(): Redis {
+  get instance(): RedisClient {
     return this.client;
   }
 
@@ -40,8 +39,7 @@ export class RedisService implements OnModuleDestroy {
     try {
       return JSON.parse(payload) as T;
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : String(error);
+      const message = error instanceof Error ? error.message : String(error);
       this.logger.warn(
         `Failed to parse Redis JSON payload for key "${key}": ${message}`,
       );
@@ -61,10 +59,10 @@ export class RedisService implements OnModuleDestroy {
     await this.client.quit();
   }
 
-  private createClient(): Redis {
+  private createClient(): RedisClient {
     const redisUrl = process.env.REDIS_URL;
     if (redisUrl != null && redisUrl.length > 0) {
-      return new Redis(redisUrl);
+      return new RedisClient(redisUrl);
     }
 
     const host = process.env.REDIS_HOST ?? "127.0.0.1";
@@ -78,8 +76,7 @@ export class RedisService implements OnModuleDestroy {
         ? process.env.REDIS_USERNAME
         : undefined;
     const dbRaw = process.env.REDIS_DB;
-    const db =
-      dbRaw != null && dbRaw.length > 0 ? Number(dbRaw) : undefined;
+    const db = dbRaw != null && dbRaw.length > 0 ? Number(dbRaw) : undefined;
 
     const options: RedisOptions = {
       host,
@@ -98,7 +95,7 @@ export class RedisService implements OnModuleDestroy {
       options.db = db;
     }
 
-    return new Redis(options);
+    return new RedisClient(options);
   }
 
   private attachLogging(): void {
@@ -111,8 +108,7 @@ export class RedisService implements OnModuleDestroy {
     });
 
     this.client.on("error", (error: unknown) => {
-      const message =
-        error instanceof Error ? error.message : String(error);
+      const message = error instanceof Error ? error.message : String(error);
       this.logger.error(`Redis error: ${message}`, {
         stack: error instanceof Error ? error.stack : undefined,
       });

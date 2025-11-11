@@ -1,0 +1,20 @@
+# syntax=docker/dockerfile:1.7
+
+FROM postgres:17-alpine
+
+ARG POSTGRES_DB=nestlibp2p
+ARG POSTGRES_USER=nestapp
+ARG POSTGRES_PASSWORD=supersecret
+ARG POSTGRES_PORT=5432
+
+ENV POSTGRES_DB=${POSTGRES_DB}
+ENV POSTGRES_USER=${POSTGRES_USER}
+ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+ENV POSTGRES_PORT=${POSTGRES_PORT}
+
+# The official image already honors POSTGRES_* args, but we mirror
+# them as env vars for clarity (and to match the .env-example defaults).
+
+EXPOSE 5432
+
+HEALTHCHECK --interval=10s --timeout=3s --retries=5 CMD pg_isready -U "${POSTGRES_USER}" -d "${POSTGRES_DB}"

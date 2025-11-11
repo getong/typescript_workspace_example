@@ -84,6 +84,15 @@ Environment variables:
   (`nestapp` in `.env-example`, matching the Dockerfile below).
 - `REDIS_PASSWORD` / `REDIS_DB` – credentials and db index passed to the Redis
   client.
+- `POSTGRES_HOST` / `POSTGRES_PORT` – Postgres host and port that TypeORM uses
+  (`127.0.0.1:5432` by default).
+- `POSTGRES_USER` / `POSTGRES_PASSWORD` – credentials that the Nest app uses
+  for the TypeORM connection (`nestapp` / `supersecret` in `.env-example`).
+- `POSTGRES_DB` – database that stores the `dial_requests` table
+  (`nestlibp2p` by default).
+- `POSTGRES_SYNCHRONIZE` – set to `false` in production if you prefer running
+  migrations manually (defaults to `true`).
+- `POSTGRES_LOGGING` – set to `true` to have TypeORM log SQL statements.
 
 ### Redis integration
 
@@ -108,12 +117,38 @@ If you need different credentials, pass new `--build-arg` values *and* update
 the corresponding `REDIS_USERNAME` / `REDIS_PASSWORD` variables in your `.env`
 file so the Nest app and Redis container stay in sync.
 
+### Postgres + TypeORM
+
+TypeORM is configured globally through `DatabaseModule`, so any Nest feature can
+call `TypeOrmModule.forFeature` to register entities. The `PeersController`
+stores every dial request inside a Postgres `dial_requests` table and exposes a
+`GET /peers/dials` endpoint so you can inspect recent history when debugging
+connectivity issues.
+
+Build and run the accompanying Postgres image (matching `.env-example` defaults)
+when you need a local database:
+
+```bash
+docker build -f Dockerfile.postgres \
+  -t nest-libp2p-postgres \
+  --build-arg POSTGRES_DB="${POSTGRES_DB:-nestlibp2p}" \
+  --build-arg POSTGRES_USER="${POSTGRES_USER:-nestapp}" \
+  --build-arg POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-supersecret}" \
+  .
+
+docker run -it --rm --name nest-postgres -p 5432:5432 nest-libp2p-postgres
+```
+
+Update the Postgres variables in your `.env` file if you choose different
+credentials or ports so the Nest app and database stay in sync.
+
 ## REST endpoints
 
 - `GET /peers` – returns the libp2p lifecycle status, listen addresses, and
   current connections for both the server and the bundled client node.
 - `GET /peers/cached` – returns the latest cached summary stored in Redis plus
   the timestamp it was recorded.
+- `GET /peers/dials` – returns recent libp2p dial attempts stored in Postgres.
 - `POST /peers/dial` – body `{ "multiaddr": "...", "peerId": "..." }` to
   instruct the client node to dial an additional peer.
 - `GET /health` – lightweight readiness data enriched with the most recent

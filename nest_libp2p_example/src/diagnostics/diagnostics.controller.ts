@@ -46,16 +46,14 @@ export class DiagnosticsController {
       lastError: summary.lastError ?? null,
     };
 
-    const previousHealth =
-      await this.redisService.getJson<HealthCachePayload>(
-        REDIS_KEYS.HEALTH_STATUS,
-      );
+    const previousHealth = await this.redisService.getJson<HealthCachePayload>(
+      REDIS_KEYS.HEALTH_STATUS,
+    );
     await this.persistHealth(snapshot);
 
-    const cachedSummary =
-      await this.redisService.getJson<CachedSummaryPayload>(
-        REDIS_KEYS.LIBP2P_SUMMARY,
-      );
+    const cachedSummary = await this.redisService.getJson<CachedSummaryPayload>(
+      REDIS_KEYS.LIBP2P_SUMMARY,
+    );
 
     return {
       ...snapshot,
