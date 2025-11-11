@@ -151,6 +151,23 @@ docker run -it --rm --name nest-postgres -p 5432:5432 nest-libp2p-postgres
 Update the Postgres variables in your `.env` file if you choose different
 credentials or ports so the Nest app and database stay in sync.
 
+#### Helper script
+
+Instead of running the commands manually, you can rebuild and launch both the
+Redis and Postgres containers in one step:
+
+```bash
+./scripts/start-databases.sh
+```
+
+The script loads `.env` (when present) so the Docker build arguments and port
+bindings stay aligned with your local configuration.
+By default it disables Docker BuildKit (`DOCKER_BUILDKIT=0`) so it can run in
+environments where pulling the `docker/dockerfile` frontend is blocked; override
+this by exporting `DOCKER_BUILDKIT=1` before running the script if needed.
+If `.env` is missing the script automatically copies `.env-example` so the Nest
+app and containers share the same credentials.
+
 ## REST endpoints
 
 - `GET /peers` – returns the libp2p lifecycle status, listen addresses, and
