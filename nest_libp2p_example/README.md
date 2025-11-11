@@ -93,6 +93,8 @@ Environment variables:
 - `POSTGRES_SYNCHRONIZE` – set to `false` in production if you prefer running
   migrations manually (defaults to `true`).
 - `POSTGRES_LOGGING` – set to `true` to have TypeORM log SQL statements.
+- `POSTGRES_SQL_FILE` – optional path to a `.sql` file that should be executed
+  automatically on startup (defaults to `./sql/schema.sql`).
 
 ### Redis integration
 
@@ -123,7 +125,14 @@ TypeORM is configured globally through `DatabaseModule`, so any Nest feature can
 call `TypeOrmModule.forFeature` to register entities. The `PeersController`
 stores every dial request inside a Postgres `dial_requests` table and exposes a
 `GET /peers/dials` endpoint so you can inspect recent history when debugging
-connectivity issues.
+connectivity issues. The libp2p server also writes an entry to the
+`node_join_logs` table each time an inbound connection succeeds, persisting the
+timestamp, remote IP/port and peer id.
+
+During bootstrap the server automatically reads `sql/schema.sql` (or the path
+defined via `POSTGRES_SQL_FILE`) and executes every statement it contains. Use
+this file to define tables, indexes, or seed data that need to exist before the
+Nest modules start handling requests.
 
 Build and run the accompanying Postgres image (matching `.env-example` defaults)
 when you need a local database:

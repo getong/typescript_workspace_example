@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 
 @Entity({ name: "dial_requests" })
@@ -21,4 +22,7 @@ export class DialRequestEntity {
 
   @CreateDateColumn({ type: "timestamptz" })
   createdAt!: Date;
+
+  @UpdateDateColumn({ type: "timestamptz" })
+  updatedAt!: Date;
 }

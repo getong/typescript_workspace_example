@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { SqlFileLoaderService } from "./sql-file-loader.service.js";
 
 function parseBoolean(value: string | undefined, fallback: boolean): boolean {
   if (value == null) {
@@ -53,5 +54,6 @@ function parseBoolean(value: string | undefined, fallback: boolean): boolean {
       },
     }),
   ],
+  providers: [SqlFileLoaderService],
 })
 export class DatabaseModule {}

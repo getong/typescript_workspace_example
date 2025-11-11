@@ -131,3 +131,39 @@ export const parseMultiaddrOrThrow = (address: string): Multiaddr => {
     throw new Error(`Failed to parse multiaddr "${address}". ${message}`);
   }
 };
+
+export const extractIpPortFromMultiaddr = (
+  address: string,
+): { ip: string | null; port: number | null } => {
+  try {
+    parseMultiaddrOrThrow(address);
+  } catch {
+    return { ip: null, port: null };
+  }
+
+  const segments = address.split("/").filter((segment) => segment.length > 0);
+  let ip: string | null = null;
+  let port: number | null = null;
+
+  for (let i = 0; i < segments.length - 1; i += 2) {
+    const protocol = segments[i];
+    const value = segments[i + 1];
+
+    if (protocol == null || value == null) {
+      continue;
+    }
+
+    if (protocol === "ip4" || protocol === "ip6") {
+      ip = value;
+    }
+
+    if (protocol === "tcp" || protocol === "udp") {
+      const parsedPort = Number(value);
+      if (Number.isFinite(parsedPort)) {
+        port = parsedPort;
+      }
+    }
+  }
+
+  return { ip, port };
+};

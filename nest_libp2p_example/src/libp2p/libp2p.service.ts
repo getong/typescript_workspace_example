@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import type { OnModuleDestroy, OnModuleInit } from "@nestjs/common";
+import type { Connection } from "@libp2p/interface";
 import { createLibp2p, type Libp2p } from "libp2p";
 import {
   createLibp2pBaseConfig,
@@ -18,6 +19,7 @@ import type {
   Libp2pSummary,
   PeerSummary,
 } from "./libp2p.types.js";
+import { ConnectionLogsService } from "./connection-logs.service.js";
 import { createContextLogger } from "../logger.js";
 
 @Injectable()
@@ -30,6 +32,8 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
   private dialTarget?: string;
   private lastError?: string;
   private autoShutdownTimer?: ReturnType<typeof setTimeout>;
+
+  constructor(private readonly connectionLogsService: ConnectionLogsService) {}
 
   async onModuleInit(): Promise<void> {
     this.lifecycleStatus = "starting";
@@ -107,6 +111,14 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
       this.logger.warn(
         `Server disconnected from peer ${evt.detail.toString()}`,
       );
+    });
+    this.serverNode.addEventListener("connection:open", (evt) => {
+      this.logInboundConnection(evt.detail).catch((error) => {
+        const message = error instanceof Error ? error.message : String(error);
+        this.logger.warn(
+          `Failed to persist inbound connection log: ${message}`,
+        );
+      });
     });
 
     this.logger.info(
@@ -251,6 +263,25 @@ export class Libp2pService implements OnModuleInit, OnModuleDestroy {
     }
 
     this.lifecycleStatus = "stopped";
+  }
+
+  private async logInboundConnection(connection: Connection): Promise<void> {
+    if (connection.direction !== "inbound") {
+      return;
+    }
+
+    const remoteAddr = connection.remoteAddr?.toString();
+    if (remoteAddr == null || remoteAddr.length === 0) {
+      return;
+    }
+
+    const peerId = connection.remotePeer?.toString() ?? null;
+
+    await this.connectionLogsService.recordJoin({
+      nodeName: peerId ?? "unknown",
+      remoteMultiaddr: remoteAddr,
+      peerId,
+    });
   }
 
   private logListenAddresses(node: Libp2p): void {
