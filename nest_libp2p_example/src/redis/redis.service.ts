@@ -33,6 +33,20 @@ export class RedisService implements OnModuleDestroy {
     } else {
       await this.client.set(key, payload);
     }
+
+    try {
+      const stored = await this.client.get(key);
+      this.logger.debug(
+        `[Redis] Cached key "${key}" => ${stored ?? "null"}${
+          ttlSeconds != null ? ` (ttl=${ttlSeconds}s)` : ""
+        }`,
+      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.warn(
+        `Failed to read back Redis key "${key}" after set: ${message}`,
+      );
+    }
   }
 
   async getJson<T>(key: string): Promise<T | null> {

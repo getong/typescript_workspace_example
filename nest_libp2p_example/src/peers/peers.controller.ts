@@ -23,6 +23,7 @@ type DialHistoryItem = {
   peerId: string | null;
   dialTarget: string;
   createdAt: string;
+  updatedAt: string;
 };
 
 @Controller("peers")
@@ -79,6 +80,7 @@ export class PeersController {
       peerId: item.peerId,
       dialTarget: item.dialTarget,
       createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
     }));
   }
 

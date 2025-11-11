@@ -95,6 +95,8 @@ Environment variables:
 - `POSTGRES_LOGGING` – set to `true` to have TypeORM log SQL statements.
 - `POSTGRES_SQL_FILE` – optional path to a `.sql` file that should be executed
   automatically on startup (defaults to `./sql/schema.sql`).
+- `POSTGRES_CACHE_TTL_SECONDS` – TTL for Redis-backed caches of Postgres query
+  results (defaults to 30 seconds).
 
 ### Redis integration
 
@@ -128,6 +130,10 @@ stores every dial request inside a Postgres `dial_requests` table and exposes a
 connectivity issues. The libp2p server also writes an entry to the
 `node_join_logs` table each time an inbound connection succeeds, persisting the
 timestamp, remote IP/port and peer id.
+
+The `/peers/dials` endpoint caches its Postgres query in Redis for
+`POSTGRES_CACHE_TTL_SECONDS` seconds to reduce load on the database while still
+returning fresh data shortly after new dial attempts are recorded.
 
 During bootstrap the server automatically reads `sql/schema.sql` (or the path
 defined via `POSTGRES_SQL_FILE`) and executes every statement it contains. Use
