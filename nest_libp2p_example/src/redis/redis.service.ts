@@ -6,11 +6,16 @@ import { createContextLogger } from "../logger.js";
 @Injectable()
 export class RedisService implements OnModuleDestroy {
   private readonly logger = createContextLogger(RedisService.name);
-  private readonly client: RedisClient;
+  private client: RedisClient;
+  private usesAuth = false;
+  private readonly redisUrl = process.env.REDIS_URL;
+  private fallbackAttempted = false;
 
   constructor() {
-    this.client = this.createClient();
-    this.attachLogging();
+    const { client, usesAuth } = this.createClient();
+    this.client = client;
+    this.usesAuth = usesAuth;
+    this.attachLogging(this.client);
   }
 
   get instance(): RedisClient {
@@ -59,10 +64,12 @@ export class RedisService implements OnModuleDestroy {
     await this.client.quit();
   }
 
-  private createClient(): RedisClient {
-    const redisUrl = process.env.REDIS_URL;
-    if (redisUrl != null && redisUrl.length > 0) {
-      return new RedisClient(redisUrl);
+  private createClient(ignoreAuth = false): {
+    client: RedisClient;
+    usesAuth: boolean;
+  } {
+    if (this.redisUrl != null && this.redisUrl.length > 0) {
+      return { client: new RedisClient(this.redisUrl), usesAuth: false };
     }
 
     const host = process.env.REDIS_HOST ?? "127.0.0.1";
@@ -83,39 +90,75 @@ export class RedisService implements OnModuleDestroy {
       port: Number.isFinite(port) ? port : 6379,
     };
 
-    if (password) {
+    let usesAuth = false;
+
+    if (!ignoreAuth && password) {
       options.password = password;
+      usesAuth = true;
     }
 
-    if (username) {
+    if (!ignoreAuth && username) {
       options.username = username;
+      usesAuth = true;
     }
 
     if (db != null && Number.isFinite(db)) {
       options.db = db;
     }
 
-    return new RedisClient(options);
+    return { client: new RedisClient(options), usesAuth };
   }
 
-  private attachLogging(): void {
-    this.client.on("connect", () => {
+  private attachLogging(client: RedisClient): void {
+    client.on("connect", () => {
       this.logger.info("Redis connection established");
     });
 
-    this.client.on("ready", () => {
+    client.on("ready", () => {
       this.logger.info("Redis is ready to accept commands");
     });
 
-    this.client.on("error", (error: unknown) => {
+    client.on("error", (error: unknown) => {
       const message = error instanceof Error ? error.message : String(error);
       this.logger.error(`Redis error: ${message}`, {
         stack: error instanceof Error ? error.stack : undefined,
       });
+
+      if (
+        !this.redisUrl &&
+        this.usesAuth &&
+        !this.fallbackAttempted &&
+        typeof message === "string" &&
+        message.toUpperCase().includes("WRONGPASS")
+      ) {
+        this.fallbackAttempted = true;
+        this.logger.warn(
+          "Redis authentication failed – retrying without username/password",
+        );
+        void this.replaceClientWithoutAuth();
+      }
     });
 
-    this.client.on("close", () => {
+    client.on("close", () => {
       this.logger.warn("Redis connection closed");
     });
+  }
+
+  private async replaceClientWithoutAuth(): Promise<void> {
+    const previous = this.client;
+    const { client, usesAuth } = this.createClient(true);
+    this.client = client;
+    this.usesAuth = usesAuth;
+    this.attachLogging(client);
+
+    try {
+      if (previous.status !== "end") {
+        await previous.quit();
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.warn(`Failed to close previous Redis client: ${message}`);
+      previous.disconnect();
+    }
   }
 }
